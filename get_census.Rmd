@@ -74,52 +74,17 @@ def get_census_peers_19(table):
   return df
 ```
 
+Pull dataframe of monthly housing costs
 ```{python}
+# Use function to pull data
 df = get_census_peers_19('group(B25104)')
-
-df = df.rename(columns = {
-  "B25104_001E":"Total",
-  "B25104_001M":"Total_MOE",
-  "B25104_002E":"Under_100",
-  "B25104_002M":"Under_100_MOE",
-  "B25104_003E":"x100_199",
-  "B25104_004E":"x200_299",
-  "B25104_005E":"x300_399",
-  "B25104_006E":"x400_499",
-  "B25104_007E":"x500_599",
-  "B25104_008E":"x600_699",
-  "B25104_009E":"x700_799",
-  })
-  
-#how to combine St. Louis?
-
-  
-```
-
-
-```{python}
-
-# Set the core url for the API for 2019 1 year ACS data
-base_url = f'https://api.census.gov/data/2019/acs/acs1?get=NAME,'
-
-# Add in the table, county, and state info
-data_url = f'{base_url}{table}&for=county:{county}&in=state:{state}&key={api_key}'
-
-# Get the data
-response=requests.get(data_url)
-
-# Transform to get ready for pandas df
-data = response.json()
 
 # Put into pandas df and rename
 # I used the same table on data.census.gov to figure out the table codes
 # https://data.census.gov/cedsci/table?q=ACSDT1Y2019.B25104&g=0400000US21_0500000US21111&tid=ACSDT1Y2019.B25104&hidePreview=false
-df = pd.DataFrame(data[1:], columns=data[0]).\
-  rename(columns = {
+df = df.rename(columns = {
   "B25104_001E":"Total",
-  "B25104_001M":"Total_MOE",
   "B25104_002E":"Under_100",
-  "B25104_002M":"Under_100_MOE",
   "B25104_003E":"x100_199",
   "B25104_004E":"x200_299",
   "B25104_005E":"x300_399",
@@ -127,8 +92,41 @@ df = pd.DataFrame(data[1:], columns=data[0]).\
   "B25104_007E":"x500_599",
   "B25104_008E":"x600_699",
   "B25104_009E":"x700_799",
+  "B25104_010E":"x800_899",
+  "B25104_011E":"x900_999",
+  "B25104_012E":"x1000_1499",
+  "B25104_013E":"x1500_1999",
+  "B25104_014E":"x2000_2499",
+  "B25104_015E":"x2500_2999",
+  "B25104_016E":"x3000_or_more",
+  "B25104_017E":"No_cash_rent"
   })
   
-df
+df = df[['NAME',
+         'Total',
+         'Under_100',
+         'x100_199',
+         'x200_299',
+         'x300_399',
+         'x400_499',
+         'x500_599',
+         'x600_699',
+         'x700_799',
+         'x800_899',
+         'x900_999',
+         'x1000_1499',
+         'x1500_1999',
+         'x2000_2499',
+         'x2500_2999',
+         'x3000_or_more',
+         'No_cash_rent']]
+
+# Combine St. Louis into one
+# Can just add the raw numbers
+
+#stl_df = df.query()
 
 ```
+
+
+
