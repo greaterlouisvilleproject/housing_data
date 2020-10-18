@@ -1,0 +1,53 @@
+---
+title: "urban_index"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r cars}
+library(tidyverse)
+
+df <- read_csv("housing_index_raw.csv")
+```
+
+Filter to just peers
+```{r}
+df_peer <- df %>% 
+  filter(county_fips %in% c("1073", "18097", "21111", "26081", "29095", "29189",
+                            "29510", "31055", "37081", "37119", "39049", "39061",
+                            "40109", "40143", "45045", "47037", "47093", "47157")) %>%
+  select(-contains("z_score"), -contains("index")) #drop index and z_score terms so we can recreate them
+```
+
+Make z scores
+```{r}
+make_z <- function(x){
+  x <- (x - mean(x)) / sd(x)
+}
+
+df_z <- df_peer %>%
+  mutate(across(where(is.numeric), make_z, .names = "z_{.col}"))
+```
+
+Make indexes using urban institute weights
+https://www.urban.org/sites/default/files/2020/08/24/where_to_prioritize_emergency_rental_assistance_to_keep_renters_in_their_homes_technical_appendix.pdf
+
+```{r}
+df_index <- df_z %>%
+  mutate(
+    housing_instability_index = z_perc_poverty_12mnth * .2 + z_perc_renters * .2 + z_perc_cost_burdened_under_35k * .2 + z_perc_overcrowding_renter_1.50_or_more * .2 + z_perc_unemployed_laborforce * .2,
+    covid_index = z_perc_no_hinsure * .5 + z_perc_low_income_jobs_lost * .5,
+    equity_index = z_perc_person_of_color * .5 + z_perc_30hamfi * .167 + z_perc_public_assistance * .167 + z_perc_foreign_born * .167,
+    overall_index = housing_instability_index * .5 + covid_index * .1 + equity_index * .4
+  )
+```
+
+## Leaflet map of Jefferson County. 
+Z scores compared to all of our peers. Can loop over and make maps for all our peers?
+
+Add raw data as layers?
+
+
