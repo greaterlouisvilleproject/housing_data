@@ -68,6 +68,14 @@ jfco_index <- jfco_index %>%
          
 jfco_sf <- full_join(jfco_sf, jfco_index, by = "GEOID")
 
+# Transform the percents
+mult100 <- function(x){
+  x <- x * 100
+}
+
+jfco_sf <- jfco_sf %>%
+  mutate(across(starts_with("perc_"), mult100))
+
 make_map <- function(indicator, title = "", legend = "", caption = ""){
   ggplot(jfco_sf) + 
   geom_sf(aes(fill={{ indicator }} )) +
@@ -126,3 +134,48 @@ make_map(equity_index, title = "Equity Subindex",
          legend = "Compared to \n other tracts", 
          caption = "This is the Urban Institute's Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
 ```
+
+# Housing Instability Indicators {.tabset .tabset-fade .tabset-pills}
+
+## Poverty
+
+```{r}
+make_map(perc_poverty_12mnth, title = "Poverty", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Percent Renting
+
+```{r}
+make_map(perc_renters, title = "Percent of Renter Occupied Housing Units", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Cost-burdened housholds
+
+```{r}
+make_map(perc_cost_burdened_under_35k, title = "Costburdened Households making under 35k", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Overcrowding
+
+```{r}
+make_map(perc_overcrowding_renter_1.50_or_more, title = "Overcrowding in Rental Housing", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Unemployed
+
+```{r}
+make_map(perc_unemployed_laborforce, title = "Unemployment", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+# Covid Indicators {.tabset .tabset-fade .tabset-pills}
+
