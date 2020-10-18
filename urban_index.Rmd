@@ -1,41 +1,45 @@
 ---
-title: "urban_index"
-output: html_document
+title: "Rental Instability in Louisville"
+author: "Greater Louisville Project"
+date: '2020-10-21'
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    code_folding: hide
 ---
 
+# Introduction
+
+This recreates the Urban Institutes [Emergency Rental Assistance Priority Index](https://www.urban.org/features/where-prioritize-emergency-rental-assistance-keep-renters-their-homes) for Louisville. The original index compares Louisville to the rest of Kentucky. At Greater Louisville Project, we think the more appropriate comparison is to our other peer cities. While the maps below show Louisville, the index values are based on a comparison to all census tracts in the core counties of our peer cities. 
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-```{r cars}
+```{r}
 library(tidyverse)
+library(rgdal)
+library(sf)
+library(viridis)
 
 df <- read_csv("housing_index_raw.csv")
-```
 
-Filter to just peers
-```{r}
+# Filter to just peers
 df_peer <- df %>% 
   filter(county_fips %in% c("1073", "18097", "21111", "26081", "29095", "29189",
                             "29510", "31055", "37081", "37119", "39049", "39061",
                             "40109", "40143", "45045", "47037", "47093", "47157")) %>%
   select(-contains("z_score"), -contains("index")) #drop index and z_score terms so we can recreate them
-```
 
-Make z scores
-```{r}
+# Make z scores
 make_z <- function(x){
   x <- (x - mean(x)) / sd(x)
 }
 
 df_z <- df_peer %>%
   mutate(across(where(is.numeric), make_z, .names = "z_{.col}"))
-```
 
-Make indexes using urban institute weights
-https://www.urban.org/sites/default/files/2020/08/24/where_to_prioritize_emergency_rental_assistance_to_keep_renters_in_their_homes_technical_appendix.pdf
-
-```{r}
 df_index <- df_z %>%
   mutate(
     housing_instability_index = z_perc_poverty_12mnth * .2 + z_perc_renters * .2 + z_perc_cost_burdened_under_35k * .2 + z_perc_overcrowding_renter_1.50_or_more * .2 + z_perc_unemployed_laborforce * .2,
@@ -45,9 +49,80 @@ df_index <- df_z %>%
   )
 ```
 
-## Leaflet map of Jefferson County. 
-Z scores compared to all of our peers. Can loop over and make maps for all our peers?
+# Rental Insecurity Index {.tabset .tabset-fade .tabset-pills}
 
-Add raw data as layers?
+```{r}
+jfco_shp <- readOGR("JC Tracts", layer = "JC Tracts",
+                     GDAL1_integer64_policy = TRUE, verbose = FALSE)
 
+jfco_sf <- st_as_sf(jfco_shp) %>%
+  mutate(GEOID = str_sub(GEO_ID, start = -11))
 
+jfco_index <- df_index %>% 
+  filter(county_fips == "21111") 
+
+# Urban institute includes a greyed out flag for tracts without enough data
+# It's easier to set the values to NA because the graphing framework has the ability to easily assign NA a different color
+jfco_index <- jfco_index %>%
+  mutate(across(where(is.numeric), ~if_else(jfco_index$grayed_out == 1, NA_real_, .)))
+         
+jfco_sf <- full_join(jfco_sf, jfco_index, by = "GEOID")
+
+make_map <- function(indicator, title = "", legend = "", caption = ""){
+  ggplot(jfco_sf) + 
+  geom_sf(aes(fill={{ indicator }} )) +
+  scale_fill_viridis(na.value = "grey", name = legend) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.border = element_blank()) +
+  labs(title = title,
+       caption = caption)
+}
+
+make_map(overall_index, title = "Rental Insecurity Index", 
+         legend = "Compared to \n other tracts", 
+         caption = "This is the Urban Institute's Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+```
+
+You can flip through the tabs below to see each of the three subindexes that make up the overall rental index.
+
+## Housing Instability Subindex
+
+- Share of people living in poverty
+- Share of renter-occupied housing units
+- Share of severely cost-burdened low-income renters
+- Share of severely overcrowded households
+- Share of unemployed people
+
+```{r}
+make_map(housing_instability_index, title = "Housing Instability Subindex", 
+         legend = "Compared to \n other tracts", 
+         caption = "This is the Urban Institute's Housing Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+```
+
+## Covid 19 Impact Subindex
+
+- Share of adults without health insurance
+- Share of low-income jobs lost to Covid-19
+
+```{r}
+make_map(covid_index, title = "Covid Instability Subindex", 
+         legend = "Compared to \n other tracts", 
+         caption = "This is the Urban Institute's Covid Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+```
+
+## Equity Subindex
+
+- Share of people of color
+- Share of extremely low-income renter households
+- Share of households receiving public assistance
+- Share of people born outside the United States
+
+```{r}
+make_map(equity_index, title = "Equity Subindex", 
+         legend = "Compared to \n other tracts", 
+         caption = "This is the Urban Institute's Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+```
