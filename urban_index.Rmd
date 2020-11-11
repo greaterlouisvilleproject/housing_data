@@ -1,7 +1,7 @@
 ---
 title: "Rental Instability in Louisville"
 author: "Greater Louisville Project"
-date: '2020-10-21'
+date: '2020-10-18'
 output:
   html_document:
     toc: yes
@@ -11,7 +11,9 @@ output:
 
 # Introduction
 
-This recreates the Urban Institutes [Emergency Rental Assistance Priority Index](https://www.urban.org/features/where-prioritize-emergency-rental-assistance-keep-renters-their-homes) for Louisville. The original index compares Louisville to the rest of Kentucky. At Greater Louisville Project, we think the more appropriate comparison is to our other peer cities. While the maps below show Louisville, the index values are based on a comparison to all census tracts in the core counties of our peer cities. 
+This recreates the Urban Institute's [Emergency Rental Assistance Priority Index](https://www.urban.org/features/where-prioritize-emergency-rental-assistance-keep-renters-their-homes) for Louisville. The original index compares Louisville to the rest of Kentucky. At Greater Louisville Project, we think the more appropriate comparison is to our other peer cities. While the maps below show Louisville, the index values are based on a comparison to all census tracts in the core counties of our peer cities. 
+
+In addition to the indexes, the indicators that make up the indexes are also mapped below. Navigation is based on tabs, so clicking on the small blue titles brings up the map related to each title. 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -178,4 +180,266 @@ make_map(perc_unemployed_laborforce, title = "Unemployment",
 ```
 
 # Covid Indicators {.tabset .tabset-fade .tabset-pills}
+
+## No Health Insurance
+
+```{r}
+make_map(perc_no_hinsure, title = "No Health Insurance", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Low Income Jobs Lost to Covid
+
+```{r}
+make_map(perc_low_income_jobs_lost, title = "Low Income Jobs Lost to Covid", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+# Equity Index {.tabset .tabset-fade .tabset-pills}
+
+## Percent PoC
+
+```{r}
+make_map(perc_person_of_color, title = "Percent Persons of Color", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Extremely Low Income
+```{r}
+make_map(perc_30hamfi, title = "Extremely Low Income", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Public Assistance
+```{r}
+make_map(perc_public_assistance, title = "Recieving Public Assistance", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Foreign Born
+```{r}
+make_map(perc_foreign_born, title = "Foreign Born", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+# Peer City Data
+
+```{r}
+#Data was pulled in Python file get_data.py and written to .csv
+df <- read_csv("low_income_renters.csv")
+
+## This code is modified from the urban institute: https://github.com/UrbanInstitute/covid-rental-risk-index/blob/master/scripts/01_generate_index_variables.R
+
+# Calculate percent of households making under 35k who pay more than 50% of their
+# income on rent
+df <- df %>%
+  # select ACS table variables w/ attached GEOID
+  select(
+    NAME,
+    # These are all the peolpe making under 35k (denominator)
+    B25074_002E,
+    B25074_011E,
+    B25074_020E,
+    # These are all the people making under 35k who pay more than 50% of their income on rent (numerator)
+    B25074_009E,
+    B25074_018E,
+    B25074_027E,
+    # These are the people making under 35k for whom this metric wasn't computed
+    # and they therefore need to be subtracted from the denominator
+    B25074_010E,
+    B25074_019E,
+    B25074_028E
+  )  %>%
+  #rename both county and city to just St. Louis
+  mutate(NAME = if_else(str_detect(NAME, "St. Louis"), "St. Louis", NAME)) %>%
+  group_by(NAME) %>%
+  summarize(
+    B25074_002E = sum(B25074_002E),
+    B25074_011E = sum(B25074_011E),
+    B25074_020E = sum(B25074_020E),
+    B25074_009E = sum(B25074_009E),
+    B25074_018E = sum(B25074_018E),
+    B25074_027E = sum(B25074_027E),
+    B25074_010E = sum(B25074_010E),
+    B25074_019E = sum(B25074_019E),
+    B25074_028E = sum(B25074_028E)
+  ) %>%
+  # create cost burden variable w/ calculation
+  mutate(
+    perc_cost_burdened_under_35k = (B25074_009E + B25074_018E + B25074_027E) /
+      (
+        B25074_002E + B25074_011E + B25074_020E - B25074_010E - B25074_019E -
+          B25074_028E
+      ),
+    #cd add
+    perc_cost_burdened_under_35k =
+      if_else(
+        B25074_002E + B25074_011E + B25074_020E == 0,
+        0,
+        perc_cost_burdened_under_35k
+      )
+  )
+```
+
+
+```{r}
+ranking <- function(df, var, plot_title = "",
+                    year = NULL, sex = "total", race = "total", peers = "Current",
+                    order = "Descending",
+                    y_title = "Percent", caption_text = "", subtitle_text = "",
+                    bar_label = TRUE, sigfig = 3, accuracy = 0.1,
+                    label_function, alternate_text = NULL,
+                    ranking_colors = TRUE,
+                    font_family = "Verdana",
+                    text_size = 20,
+                    axis_size = 60){
+  
+  # Copy variable var to a new column for use with the '$' operator
+  var <- dplyr:::tbl_at_vars(df, vars(!!enquo(var)))
+  df$var <- df[[var]]
+  
+  # Filter to sex, race, and year
+  if ("sex" %in% names(df)) df <- df[df$sex == sex,]
+  if ("race" %in% names(df)) df <- df[df$race == race,]
+  if("year" %in% names(df)) {
+    if (is.null(year)) year <- max(years_in_df(df, var))
+    df <- df[df$year %in% year,]
+    
+    if (length(year) > 1) {
+      df %<>%
+        group_by_at(df %cols_in% c("MSA", "FIPS")) %>%
+        summarise(var = mean(var, na.rm = TRUE)) %>%
+        ungroup()
+    }
+  }
+  
+  # Add peer data if not already present
+  if (df_type(df) %in% c("FIPS", "MSA") & "current" %not_in% names(df)) df %<>% pull_peers()
+  
+  # Filter to peer parameter
+  if (peers %in% c("current", "Current"))   df %<>% filter(current == 1)
+  if (peers %in% c("baseline", "Baseline")) df %<>% filter(baseline == 1)
+  
+  # Sort according to order parameter
+  if (order %in% c("descending", "Descending")) df %<>% arrange(desc(var))
+  if (order %in% c("ascending", "Ascending"))   df %<>% arrange(var)
+  
+  df %<>% filter(!is.na(var))
+  
+  # Create numbered city labels for left side of graph
+  df %<>%
+    mutate(
+      rank = row_number(),
+      names = paste0(rank, ". ", city))
+  
+  # Set bar colors
+  if (ranking_colors) {
+    
+    color_values <- c("#96ca4f", "#ffd600", "#db2834")
+    color_names <- c("green", "yellow", "red")
+    if (order %in% c("descending", "Descending")) {color_names  = rev(color_names)}
+    
+    breaks <- classInt::classIntervals(na.omit(df$var), 3, style = "jenks")
+    df$color <- NA
+    df$color[df$var <= breaks$brks[2]] <- color_names[1]
+    df$color[df$var > breaks$brks[2] & df$var <= breaks$brks[3]] <- color_names[2]
+    df$color[df$var > breaks$brks[3]] <- color_names[3]
+    
+  } else {
+    df$color <- "blue"
+    color_values <- "#f58021"
+    color_names <- "blue"
+  }
+  
+  if (order %in% c("descending", "Descending")) color_values = rev(color_values)
+  
+  # Create numeric labels
+  if (!missing(label_function)) {
+    label_text <- df$var %>% signif(sigfig) %>% label_function()
+  } else if (y_title == "Dollars") {
+    if(mean(df$var, na.rm = TRUE) > 10000) {
+      label_text <- df$var %>% signif(sigfig) %>% scales::dollar(accuracy = accuracy, scale = .001, suffix = "k")
+    } else {
+      label_text <- df$var %>% signif(sigfig) %>% scales::dollar(accuracy = .01)
+    }
+  } else if (stringr::str_detect(y_title, "Percent")) {
+    label_text <- df$var %>% signif(sigfig) %>% scales::percent(accuracy = accuracy, scale = 1, suffix = "%")
+  } else {
+    label_text <- df$var %>% signif(sigfig) %>% scales::comma(accuracy = accuracy)
+  }
+  
+  # Set text format, highlight and italicise Louisville text, highlight Louisville bar
+  df$textcolor <- "#000000"
+  df$textcolor[df$city == "Louisville"] <- "#00a9b7"
+  
+  df$linecolor <- "#ffffff"
+  df$linecolor[df$city == "Louisville"] <- "#00a9b7"
+  
+  df$lou <- if_else(df$city == "Louisville", 1, 0)
+  
+  df$text_alignment <- 1.1
+  if (!is.null(alternate_text)) df$text_alignment[df$rank %in% alternate_text] <- -0.1
+  
+  ### PLOT GRAPH
+  
+  # Initial plot
+  p <- ggplot(data = df,
+              aes(x = factor(names, levels = rev(names)),
+                  y = var,
+                  fill  = factor(color, levels = color_names, ordered = TRUE)))
+  
+  p <- p + guides(fill = FALSE, color = FALSE)
+  
+  # Add bars
+  p <- p +
+    geom_bar(aes(color = factor(lou, levels = 0:1)),
+             stat = "identity",
+             size = 1) +
+    coord_flip() +
+    ggthemes::theme_tufte()
+  
+  p <- p + scale_fill_manual(values = color_values)
+  p <- p + scale_color_manual(values = c("#ffffff", "#00a9b7"))
+  
+  # Add features
+  title_scale <- min(1, 48 / nchar(plot_title))
+  
+  p <- p + theme(text = element_text(family = font_family),
+                 plot.title = element_text(size = 22 * title_scale, hjust = 0.5, margin = margin(b = 20, unit = "pt")),
+                 axis.text.y = element_text(hjust = 0,
+                                            size = axis_size, color = rev(df$textcolor)),
+                 axis.title.x = element_text(size = axis_size),
+                 axis.ticks = element_blank(),
+                 axis.text.x = element_blank(),
+                 plot.caption = element_text(size = 36, lineheight = 0.5))
+  
+  if(subtitle_text != ""){
+    p <- p + theme(plot.subtitle = element_text(hjust = 0.5, size = 16)) +
+      labs(subtitle = subtitle_text)
+  }
+  
+  # Add numeric labels to bars based on bar_label parameter
+  if (y_title != "" & bar_label) {
+    p <- p + geom_text(aes(label = label_text, hjust = text_alignment),
+                       size = text_size,
+                       family = font_family)
+  }
+  
+  # Add vertical line to the left side of the bars based on the h_line parameter
+  if (min(df$var, na.rm = TRUE) < 0) p <- p + geom_hline(yintercept = 0, linetype = "longdash", size = 2)
+  
+  # Add remaining text
+  p <- p + labs(title = plot_title, y = y_title,
+                x = "", caption = caption_text)
+  p
+}
+
+```
+
 
