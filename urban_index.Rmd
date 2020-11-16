@@ -230,7 +230,7 @@ make_map(perc_foreign_born, title = "Foreign Born",
          caption = "Data from Urban Institute")
 ```
 
-# Peer City Data
+# Peer City Data {.tabset .tabset-fade .tabset-pills}
 
 ```{r}
 # set up fonts
@@ -456,8 +456,8 @@ df <- df %>%
                        `Jefferson County, Kentucky` = "Louisville",
                        `Kent County, Michigan` = "Grand Rapids",
                        `Knox County, Tennessee` = "Knoxville",
-                       `Marion County, Indianapolis` = "Indianapolis",
-                       `Mecklenburg County, North Carolina` = "",
+                       `Marion County, Indiana` = "Indianapolis",
+                       `Mecklenburg County, North Carolina` = "Charlotte",
                        `Oklahoma County, Oklahoma` = "Oklahoma City",
                        `Shelby County, Tennessee` = "Memphis",
                        `Tulsa County, Oklahoma` = "Tulsa"),
@@ -503,8 +503,8 @@ oc_df <- oc_df %>%
                        `Jefferson County, Kentucky` = "Louisville",
                        `Kent County, Michigan` = "Grand Rapids",
                        `Knox County, Tennessee` = "Knoxville",
-                       `Marion County, Indianapolis` = "Indianapolis",
-                       `Mecklenburg County, North Carolina` = "",
+                       `Marion County, Indiana` = "Indianapolis",
+                       `Mecklenburg County, North Carolina` = "Charlotte",
                        `Oklahoma County, Oklahoma` = "Oklahoma City",
                        `Shelby County, Tennessee` = "Memphis",
                        `Tulsa County, Oklahoma` = "Tulsa"),
@@ -517,7 +517,141 @@ plt_oc
 ```
 
 ## Unemployment
-```{r}
 
+```{r}
+#Data was pulled in Python file get_data.py and written to .csv
+un_df <- read_csv("unemployed.csv")
+
+## This code is modified from the urban institute: https://github.com/UrbanInstitute/covid-rental-risk-index/blob/master/scripts/01_generate_index_variables.R
+un_df <- un_df %>%
+  # select ACS table variables w/ attached GEOID
+  select(B12006_055E, B12006_050E, B12006_011E, B12006_006E, B12006_022E, B12006_017E, B12006_033E, B12006_028E, B12006_044E, B12006_039E, B12006_053E, B12006_048E, B12006_009E, B12006_004E, B12006_020E, B12006_015E, B12006_031E, B12006_026E, B12006_042E, B12006_037E, NAME) %>%
+  # collapse St. Louis into one
+  mutate(NAME = if_else(str_detect(NAME, "St. Louis"), "St. Louis", NAME)) %>%
+  group_by(NAME) %>%
+  summarize(across(where(is.numeric), sum)) %>%
+  # create unemployed variable w/ calculation
+  mutate(perc_unemployed_laborforce = ((B12006_055E + B12006_050E + B12006_011E + B12006_006E + B12006_022E + B12006_017E + B12006_033E + B12006_028E + B12006_044E + B12006_039E) / (B12006_053E + B12006_048E + B12006_009E + B12006_004E + B12006_020E + B12006_015E + B12006_031E + B12006_026E + B12006_042E + B12006_037E)),
+         perc_unemployed_laborforce = 
+           if_else(B12006_053E + B12006_048E + B12006_009E + B12006_004E + B12006_020E + B12006_015E + B12006_031E + B12006_026E + B12006_042E + B12006_037E == 0, 0,
+                   perc_unemployed_laborforce))
+
+# Clean up for graph
+un_df <- un_df %>%
+  mutate(city = recode(NAME,
+                       `Davidson County, Tennessee` = "Nashville",
+                       `Douglas County, Nebraska` = "Omaha",
+                       `Franklin County, Ohio` = "Columbus",
+                       `Greenville County, South Carolina` = "Greenville",
+                       `Guilford County, North Carolina` = "Greensboro",
+                       `Hamilton County, Ohio` = "Cincinnati",
+                       `Jackson County, Missouri` = "Kansas City",
+                       `Jefferson County, Alabama` = "Birmingham",
+                       `Jefferson County, Kentucky` = "Louisville",
+                       `Kent County, Michigan` = "Grand Rapids",
+                       `Knox County, Tennessee` = "Knoxville",
+                       `Marion County, Indiana` = "Indianapolis",
+                       `Mecklenburg County, North Carolina` = "Charlotte",
+                       `Oklahoma County, Oklahoma` = "Oklahoma City",
+                       `Shelby County, Tennessee` = "Memphis",
+                       `Tulsa County, Oklahoma` = "Tulsa"),
+         perc_unemployed_laborforce = 100 * perc_unemployed_laborforce) 
+
+plt_un <- ranking(un_df, "perc_unemployed_laborforce", text_size = 1, order = "ascending",
+                             plot_title = "Unemployed")
+
+plt_un
+```
+
+## Share renting
+
+```{r}
+#Data was pulled in Python file get_data.py and written to .csv
+sr_df <- read_csv("share_renting.csv")
+
+## This code is modified from the urban institute: https://github.com/UrbanInstitute/covid-rental-risk-index/blob/master/scripts/01_generate_index_variables.R
+sr_df <- sr_df %>%
+  # select ACS table variables w/ attached GEOID
+  select(B25003_003E, B25003_001E, NAME) %>%
+  # collapse St. Louis into one
+  mutate(NAME = if_else(str_detect(NAME, "St. Louis"), "St. Louis", NAME)) %>%
+  group_by(NAME) %>%
+  summarize(across(where(is.numeric), sum)) %>%
+  # create perc_renters variable w/ calculation
+  mutate(perc_renters = (B25003_003E / B25003_001E),
+         perc_renters = if_else(B25003_001E == 0, 0, perc_renters),
+         num_renters = B25003_003E)
+
+# Clean up for graph
+sr_df <- sr_df %>%
+  mutate(city = recode(NAME,
+                       `Davidson County, Tennessee` = "Nashville",
+                       `Douglas County, Nebraska` = "Omaha",
+                       `Franklin County, Ohio` = "Columbus",
+                       `Greenville County, South Carolina` = "Greenville",
+                       `Guilford County, North Carolina` = "Greensboro",
+                       `Hamilton County, Ohio` = "Cincinnati",
+                       `Jackson County, Missouri` = "Kansas City",
+                       `Jefferson County, Alabama` = "Birmingham",
+                       `Jefferson County, Kentucky` = "Louisville",
+                       `Kent County, Michigan` = "Grand Rapids",
+                       `Knox County, Tennessee` = "Knoxville",
+                       `Marion County, Indiana` = "Indianapolis",
+                       `Mecklenburg County, North Carolina` = "Charlotte",
+                       `Oklahoma County, Oklahoma` = "Oklahoma City",
+                       `Shelby County, Tennessee` = "Memphis",
+                       `Tulsa County, Oklahoma` = "Tulsa"),
+         perc_renters = 100 * perc_renters) 
+
+plt_sr <- ranking(sr_df, "perc_renters", text_size = 1, order = "ascending",
+                             plot_title = "Percent Renters")
+
+plt_sr
+```
+
+## Poverty
+
+```{r}
+#Data was pulled in Python file get_data.py and written to .csv
+pv_df <- read_csv("poverty.csv")
+
+## This code is modified from the urban institute: https://github.com/UrbanInstitute/covid-rental-risk-index/blob/master/scripts/01_generate_index_variables.R
+pv_df <- pv_df %>%
+  # select ACS table variables w/ attached GEOID
+select(C17002_002E, C17002_003E, C17002_001E, NAME) %>%  
+  # collapse St. Louis into one
+  mutate(NAME = if_else(str_detect(NAME, "St. Louis"), "St. Louis", NAME)) %>%
+  group_by(NAME) %>%
+  summarize(across(where(is.numeric), sum)) %>%
+  # create poverty variable w/ calculation
+  mutate(perc_poverty_12mnth = ((C17002_002E + C17002_003E) / C17002_001E),
+         perc_poverty_12mnth = 
+           if_else(C17002_001E == 0, 0, perc_poverty_12mnth))
+
+# Clean up for graph
+pv_df <- pv_df %>%
+  mutate(city = recode(NAME,
+                       `Davidson County, Tennessee` = "Nashville",
+                       `Douglas County, Nebraska` = "Omaha",
+                       `Franklin County, Ohio` = "Columbus",
+                       `Greenville County, South Carolina` = "Greenville",
+                       `Guilford County, North Carolina` = "Greensboro",
+                       `Hamilton County, Ohio` = "Cincinnati",
+                       `Jackson County, Missouri` = "Kansas City",
+                       `Jefferson County, Alabama` = "Birmingham",
+                       `Jefferson County, Kentucky` = "Louisville",
+                       `Kent County, Michigan` = "Grand Rapids",
+                       `Knox County, Tennessee` = "Knoxville",
+                       `Marion County, Indiana` = "Indianapolis",
+                       `Mecklenburg County, North Carolina` = "Charlotte",
+                       `Oklahoma County, Oklahoma` = "Oklahoma City",
+                       `Shelby County, Tennessee` = "Memphis",
+                       `Tulsa County, Oklahoma` = "Tulsa"),
+         perc_poverty_12mnth = 100 * perc_poverty_12mnth) 
+
+plt_pv <- ranking(pv_df, "perc_poverty_12mnth", text_size = 1, order = "ascending",
+                             plot_title = "Poverty")
+
+plt_pv
 ```
 
