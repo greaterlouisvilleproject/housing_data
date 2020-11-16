@@ -82,7 +82,8 @@ jfco_sf <- jfco_sf %>%
 make_map <- function(indicator, title = "", legend = "", caption = ""){
   ggplot(jfco_sf) + 
   geom_sf(aes(fill={{ indicator }} )) +
-  scale_fill_viridis(na.value = "grey", name = legend) +
+  scale_fill_gradient(low = "#323844", high = "#d63631", name = "Percent") +
+  #scale_fill_viridis(na.value = "grey", name = legend) +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.text = element_blank(),
@@ -232,6 +233,159 @@ make_map(perc_foreign_born, title = "Foreign Born",
 # Peer City Data
 
 ```{r}
+# set up fonts
+library(showtext)
+showtext_auto()
+
+font_add("Montserrat", "Montserrat/Montserrat-Regular.ttf")
+font_add("Montserrat Bold", "Montserrat/Montserrat-SemiBold.ttf")
+
+# Ranking graph function
+ranking <- function(df, var, plot_title = "",
+                    year = NULL, sex = "total", race = "total",
+                    order = "Descending",
+                    y_title = "Percent", caption_text = "", subtitle_text = "",
+                    bar_label = TRUE, sigfig = 3, accuracy = 0.1,
+                    label_function, alternate_text = NULL,
+                    ranking_colors = TRUE, text_size){
+  # Copy variable var to a new column for use with the '$' operator
+  var <- dplyr:::tbl_at_vars(df, vars(!!enquo(var)))
+  df$var <- df[[var]]
+  # Filter to sex, race, and year
+  if ("sex" %in% names(df)) df <- df[df$sex == sex,]
+  if ("race" %in% names(df)) df <- df[df$race == race,]
+  if("year" %in% names(df)) {
+    if (is.null(year)) year <- max(years_in_df(df, var))
+    df <- df[df$year %in% year,]
+    if (length(year) > 1) {
+      df %<>%
+        group_by_at(df %cols_in% c("MSA", "FIPS")) %>%
+        summarise(var = mean(var, na.rm = TRUE)) %>%
+        ungroup()
+    }
+  }
+  # Add peer data if not already present
+  # if (df_type(df) %in% c("FIPS", "MSA") & "current" %not_in% names(df)) df %<>% pull_peers(add_info = T)
+  
+  # Sort according to order parameter
+  if (order %in% c("descending", "Descending")) df %<>% arrange(desc(var))
+  if (order %in% c("ascending", "Ascending"))   df %<>% arrange(var)
+  df %<>% filter(!is.na(var))
+  # Create numbered city labels for left side of graph
+  df %<>%
+    mutate(
+      rank = row_number(),
+      names = paste0(rank, ". ", city))
+  # Set bar colors
+  if (ranking_colors) {
+    # color_values <- c("#96ca4f", "#ffd600", "#db2834")
+    # color_names <- c("green", "yellow", "red")
+    # if (order %in% c("descending", "Descending")) {color_names  = rev(color_names)}
+    # 
+    # breaks <- classInt::classIntervals(na.omit(df$var), 3, style = "jenks")
+    # df$color <- NA
+    # df$color[df$var <= breaks$brks[2]] <- color_names[1]
+    # df$color[df$var > breaks$brks[2] & df$var <= breaks$brks[3]] <- color_names[2]
+    # df$color[df$var > breaks$brks[3]] <- color_names[3]
+    
+    color_values <- c("#d63631", "#323844")
+    color_names <- c("gray", "red")
+    
+    df$color <- "gray"
+    df$color[df$city == "Louisville"] <- "red"
+  } else {
+    df$color <- "blue"
+    color_values <- "#f58021"
+    color_names <- "blue"
+  }
+  if (order %in% c("descending", "Descending")) color_values = rev(color_values)
+  # Create numeric labels
+  # Create numeric labels
+  if (!missing(label_function)) {
+    label_text <- df$var %>% signif(sigfig) %>% label_function()
+  } else if (y_title == "Dollars") {
+    if(mean(df$var, na.rm = TRUE) > 10000) {
+      label_text <- df$var %>% signif(sigfig) %>% scales::dollar(accuracy = accuracy, scale = .001, suffix = "k")
+    } else {
+      label_text <- df$var %>% signif(sigfig) %>% scales::dollar(accuracy = .01)
+    }
+  } else if (stringr::str_detect(y_title, "Percent")) {
+    label_text <- df$var %>% signif(sigfig) %>% scales::percent(accuracy = accuracy, scale = 1, suffix = "%")
+  } else {
+    label_text <- df$var %>% signif(sigfig) %>% scales::comma(accuracy = accuracy)
+  }
+
+  # Set text format, highlight and italicise Louisville text, highlight Louisville bar
+  df$textcolor <- "#000000"
+  df$textcolor[df$city == "Louisville"] <- "#000000"
+  
+  df$textfont <- "Montserrat"
+  df$textfont[df$city == "Louisville"] <- "Montserrat Bold"
+  
+  label_color_names <- c("white", "black")
+  label_color_values <- c("#000000", "#ffffff")
+  
+  df$label_color <- "white"
+  df$label_color[df$city == "Louisville"] <- "black"
+  #df$linecolor <- "#ffffff"
+  #df$linecolor[df$city == "Louisville"] <- "#00a9b7"
+  df$lou <- if_else(df$city == "Louisville", 1, 0)
+  df$text_alignment <- 1.1
+  if (!is.null(alternate_text)) df$text_alignment[df$rank %in% alternate_text] <- -0.1
+  ### PLOT GRAPH
+  
+  # Initial plot
+  p <- ggplot(data = df,
+              aes(x = factor(names, levels = rev(names)),
+                  y = var,
+                  fill  = factor(color, levels = color_names, ordered = TRUE)))
+  p <- p + guides(fill = FALSE, color = FALSE)
+  # Add bars
+  p <- p +
+    geom_bar(stat = "identity",
+             size = text_size) +
+    coord_flip() +
+    ggthemes::theme_tufte()
+  p <- p + scale_fill_manual(values = color_values)
+  #p <- p + scale_color_manual(values = c("#ffffff", "#00a9b7"))
+  # Add features
+  title_scale <- min(1, 48 / nchar(plot_title))
+  p <- p + theme(text = element_text(family = "Montserrat"),
+                 plot.title = element_text(size = 14 * title_scale * text_size, hjust = 0.5, margin = margin(b = 10, unit = "pt")),
+                 axis.text.y = element_text(hjust = 0,
+                                            size = 10 * text_size, 
+                                            color = rev(df$textcolor),
+                                            family = rev(df$textfont)),
+                 axis.title.x = element_text(size = 10 * text_size),
+                 axis.ticks = element_blank(),
+                 axis.text.x = element_blank(),
+                 plot.caption = element_text(size = 5 * text_size, lineheight = 0.5))
+  if(subtitle_text != ""){
+    p <- p + theme(plot.subtitle = element_text(hjust = 0.5, size = 5 * text_size)) +
+      labs(subtitle = subtitle_text)
+  }
+  # Add numeric labels to bars based on bar_label parameter
+  if (y_title != "" & bar_label) {
+    p <- p + geom_text(aes(label = label_text, 
+                           hjust = text_alignment, 
+                           color = factor(label_color),
+                           family = textfont),
+                       size = 5 * text_size) +
+       scale_colour_manual(values=c("#000000", "#ffffff"))
+    }
+  # Add vertical line to the left side of the bars based on the h_line parameter
+  if (min(df$var, na.rm = TRUE) < 0) p <- p + geom_hline(yintercept = 0, linetype = "longdash", size = 2)
+  # Add remaining text
+  p <- p + labs(title = plot_title, y = y_title,
+                x = "", caption = caption_text)
+  
+  p
+}
+
+```
+
+## Cost Burdened Renters
+```{r}
 #Data was pulled in Python file get_data.py and written to .csv
 df <- read_csv("low_income_renters.csv")
 
@@ -295,9 +449,9 @@ df <- df %>%
                        `Douglas County, Nebraska` = "Omaha",
                        `Franklin County, Ohio` = "Columbus",
                        `Greenville County, South Carolina` = "Greenville",
-                       `Guilford County, North Carolina` = "",
+                       `Guilford County, North Carolina` = "Greensboro",
                        `Hamilton County, Ohio` = "Cincinnati",
-                       `Jackson County, Missouri` = "",
+                       `Jackson County, Missouri` = "Kansas City",
                        `Jefferson County, Alabama` = "Birmingham",
                        `Jefferson County, Kentucky` = "Louisville",
                        `Kent County, Michigan` = "Grand Rapids",
@@ -308,150 +462,62 @@ df <- df %>%
                        `Shelby County, Tennessee` = "Memphis",
                        `Tulsa County, Oklahoma` = "Tulsa"),
          perc_cost_burdened_under_35k = 100 * perc_cost_burdened_under_35k) 
-```
 
-```{r}
-# set up fonts
-library(showtext)
-showtext_auto()
-
-font_add("Montserrat", "Montserrat/Montserrat-Regular.ttf")
-font_add("Montserrat Bold", "Montserrat/Montserrat-SemiBold.ttf")
-
-ranking <- function(df, var, plot_title = "",
-                    year = NULL, sex = "total", race = "total",
-                    order = "Descending",
-                    y_title = "Percent", caption_text = "", subtitle_text = "",
-                    bar_label = TRUE, sigfig = 3, accuracy = 0.1,
-                    label_function, alternate_text = NULL,
-                    ranking_colors = TRUE, text_size){
-  # Copy variable var to a new column for use with the '$' operator
-  var <- dplyr:::tbl_at_vars(df, vars(!!enquo(var)))
-  df$var <- df[[var]]
-  # Filter to sex, race, and year
-  if ("sex" %in% names(df)) df <- df[df$sex == sex,]
-  if ("race" %in% names(df)) df <- df[df$race == race,]
-  if("year" %in% names(df)) {
-    if (is.null(year)) year <- max(years_in_df(df, var))
-    df <- df[df$year %in% year,]
-    if (length(year) > 1) {
-      df %<>%
-        group_by_at(df %cols_in% c("MSA", "FIPS")) %>%
-        summarise(var = mean(var, na.rm = TRUE)) %>%
-        ungroup()
-    }
-  }
-  # Add peer data if not already present
-  # if (df_type(df) %in% c("FIPS", "MSA") & "current" %not_in% names(df)) df %<>% pull_peers(add_info = T)
-  
-  # Sort according to order parameter
-  if (order %in% c("descending", "Descending")) df %<>% arrange(desc(var))
-  if (order %in% c("ascending", "Ascending"))   df %<>% arrange(var)
-  df %<>% filter(!is.na(var))
-  # Create numbered city labels for left side of graph
-  df %<>%
-    mutate(
-      rank = row_number(),
-      names = paste0(rank, ". ", city))
-  # Set bar colors
-  if (ranking_colors) {
-    # color_values <- c("#96ca4f", "#ffd600", "#db2834")
-    # color_names <- c("green", "yellow", "red")
-    # if (order %in% c("descending", "Descending")) {color_names  = rev(color_names)}
-    # 
-    # breaks <- classInt::classIntervals(na.omit(df$var), 3, style = "jenks")
-    # df$color <- NA
-    # df$color[df$var <= breaks$brks[2]] <- color_names[1]
-    # df$color[df$var > breaks$brks[2] & df$var <= breaks$brks[3]] <- color_names[2]
-    # df$color[df$var > breaks$brks[3]] <- color_names[3]
-    
-    color_values <- c("#d63631", "#323844")
-    color_names <- c("gray", "red")
-    
-    df$color <- "gray"
-    df$color[df$city == "Louisville"] <- "red"
-  } else {
-    df$color <- "blue"
-    color_values <- "#f58021"
-    color_names <- "blue"
-  }
-  if (order %in% c("descending", "Descending")) color_values = rev(color_values)
-  # Create numeric labels
-
-  label_text <- df$var %>% signif(sigfig) %>% scales::comma(accuracy = accuracy)
-    
-  # Set text format, highlight and italicise Louisville text, highlight Louisville bar
-  df$textcolor <- "#000000"
-  df$textcolor[df$city == "Louisville"] <- "#000000"
-  
-  df$textfont <- "Montserrat"
-  df$textfont[df$city == "Louisville"] <- "Montserrat Bold"
-  
-  label_color_names <- c("white", "black")
-  label_color_values <- c("#000000", "#ffffff")
-  
-  df$label_color <- "white"
-  df$label_color[df$city == "Louisville"] <- "black"
-  #df$linecolor <- "#ffffff"
-  #df$linecolor[df$city == "Louisville"] <- "#00a9b7"
-  df$lou <- if_else(df$city == "Louisville", 1, 0)
-  df$text_alignment <- 1.1
-  if (!is.null(alternate_text)) df$text_alignment[df$rank %in% alternate_text] <- -0.1
-  ### PLOT GRAPH
-  
-  # Initial plot
-  p <- ggplot(data = df,
-              aes(x = factor(names, levels = rev(names)),
-                  y = var,
-                  fill  = factor(color, levels = color_names, ordered = TRUE)))
-  p <- p + guides(fill = FALSE, color = FALSE)
-  # Add bars
-  p <- p +
-    geom_bar(stat = "identity",
-             size = text_size) +
-    coord_flip() +
-    ggthemes::theme_tufte()
-  p <- p + scale_fill_manual(values = color_values)
-  #p <- p + scale_color_manual(values = c("#ffffff", "#00a9b7"))
-  # Add features
-  title_scale <- min(1, 48 / nchar(plot_title))
-  p <- p + theme(text = element_text(family = "Montserrat"),
-                 plot.title = element_text(size = 12 * title_scale * text_size, hjust = 0.5, margin = margin(b = 10, unit = "pt")),
-                 axis.text.y = element_text(hjust = 0,
-                                            size = 10 * text_size, 
-                                            color = rev(df$textcolor),
-                                            family = rev(df$textfont)),
-                 axis.title.x = element_text(size = 10 * text_size),
-                 axis.ticks = element_blank(),
-                 axis.text.x = element_blank(),
-                 plot.caption = element_text(size = 5 * text_size, lineheight = 0.5))
-  if(subtitle_text != ""){
-    p <- p + theme(plot.subtitle = element_text(hjust = 0.5, size = 5 * text_size)) +
-      labs(subtitle = subtitle_text)
-  }
-  # Add numeric labels to bars based on bar_label parameter
-  if (y_title != "" & bar_label) {
-    p <- p + geom_text(aes(label = label_text, 
-                           hjust = text_alignment, 
-                           color = factor(label_color),
-                           family = textfont),
-                       size = 5 * text_size) +
-       scale_colour_manual(values=c("#000000", "#ffffff"))
-    }
-  # Add vertical line to the left side of the bars based on the h_line parameter
-  if (min(df$var, na.rm = TRUE) < 0) p <- p + geom_hline(yintercept = 0, linetype = "longdash", size = 2)
-  # Add remaining text
-  p <- p + labs(title = plot_title, y = y_title,
-                x = "", caption = caption_text)
-  
-  p
-}
-
-```
-
-```{r}
-plt_cost_burdened <- ranking(df, "perc_cost_burdened_under_35k", text_size = 1, order = "ascending")
+plt_cost_burdened <- ranking(df, "perc_cost_burdened_under_35k", text_size = 1, order = "ascending",
+                             plot_title = "Cost Burdened Renters in Households Making Under 35k ")
 
 plt_cost_burdened
+```
+
+## Overcrowding
+
+```{r}
+#Data was pulled in Python file get_data.py and written to .csv
+oc_df <- read_csv("overcrowding.csv")
+
+## This code is modified from the urban institute: https://github.com/UrbanInstitute/covid-rental-risk-index/blob/master/scripts/01_generate_index_variables.R
+
+oc_df <- oc_df %>%
+  # select ACS table variables w/ attached GEOID
+  select(NAME, B25014_013E, B25014_012E, B25014_008E)  %>%
+  #rename both county and city to just St. Louis
+  mutate(NAME = if_else(str_detect(NAME, "St. Louis"), "St. Louis", NAME)) %>%
+  group_by(NAME) %>%
+  summarize(across(where(is.numeric), sum)) %>%
+   # create cost burden variable w/ calculation
+  mutate(perc_overcrowding_renter_1.50_or_more = ((B25014_012E + B25014_013E) / B25014_008E),
+         perc_overcrowding_renter_1.50_or_more = 
+           if_else(B25014_008E == 0, 0, perc_overcrowding_renter_1.50_or_more))
+
+# Clean up for graph
+oc_df <- oc_df %>%
+  mutate(city = recode(NAME,
+                       `Davidson County, Tennessee` = "Nashville",
+                       `Douglas County, Nebraska` = "Omaha",
+                       `Franklin County, Ohio` = "Columbus",
+                       `Greenville County, South Carolina` = "Greenville",
+                       `Guilford County, North Carolina` = "Greensboro",
+                       `Hamilton County, Ohio` = "Cincinnati",
+                       `Jackson County, Missouri` = "Kansas City",
+                       `Jefferson County, Alabama` = "Birmingham",
+                       `Jefferson County, Kentucky` = "Louisville",
+                       `Kent County, Michigan` = "Grand Rapids",
+                       `Knox County, Tennessee` = "Knoxville",
+                       `Marion County, Indianapolis` = "Indianapolis",
+                       `Mecklenburg County, North Carolina` = "",
+                       `Oklahoma County, Oklahoma` = "Oklahoma City",
+                       `Shelby County, Tennessee` = "Memphis",
+                       `Tulsa County, Oklahoma` = "Tulsa"),
+         perc_overcrowding_renter_1.50_or_more = 100 * perc_overcrowding_renter_1.50_or_more) 
+
+plt_oc <- ranking(oc_df, "perc_overcrowding_renter_1.50_or_more", text_size = 1, order = "ascending",
+                             plot_title = "Overcrowding")
+
+plt_oc
+```
+
+## Unemployment
+```{r}
+
 ```
 

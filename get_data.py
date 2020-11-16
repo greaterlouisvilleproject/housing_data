@@ -60,5 +60,21 @@ def get_census_peers_19(table):
 
 # Severely Cost-Burdened Low Income Renters
 df = get_census_peers_19('group(B25074)')
-
 df.to_csv("low_income_renters.csv")
+
+# Overcrowding
+df = get_census_peers_19('group(B25014)')
+df.to_csv("overcrowding.csv")
+
+# Unemployed
+df = get_census_peers_19('group(B12006)')
+df.to_csv("unemployed.csv")
+
+# Share renting
+df = get_census_peers_19('group(B25003)')
+df.to_csv("share_renting.csv")
+
+# Poverty
+df = get_census_peers_19('group(C17002)')
+df.to_csv("poverty.csv")
+
