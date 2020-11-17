@@ -655,3 +655,59 @@ plt_pv <- ranking(pv_df, "perc_poverty_12mnth", text_size = 1, order = "ascendin
 plt_pv
 ```
 
+# Metro Council Districts
+
+```{r}
+# Read in cross walk
+tract_to_district <- read_csv("district_tract_crosswalk.csv") %>%
+  mutate(tract = as.character(tract))
+
+# Join to data
+district_level <- df_index %>%
+  rename(tract = GEOID) %>%
+  # Remove airport to avoid dividing by zero
+  filter(tract!= "21111980100") %>%
+  # join crosswalk data to dataframe
+  left_join(tract_to_district, by = "tract") %>%   
+  # Group by district
+  group_by(district) %>%
+  # join crosswalk data to dataframe
+  summarise(across(where(is.numeric), ~sum(. * total)), .groups = "drop")
+
+# Shape files
+metro_shp <- readOGR("Council_Districts", layer = "council_districts",
+                     GDAL1_integer64_policy = TRUE, verbose = FALSE)
+
+metro_sf <- st_as_sf(metro_shp) %>%
+  rename(district = coundist)
+
+metro_sf <- full_join(metro_sf, district_level, by = "district")
+
+# Transform the percents
+mult100 <- function(x){
+  x <- x * 100
+}
+
+metro_sf <- metro_sf %>%
+  mutate(across(starts_with("perc_"), mult100))
+
+make_map <- function(indicator, title = "", legend = "", caption = ""){
+  ggplot(metro_sf) + 
+  geom_sf(aes(fill={{ indicator }} )) +
+  scale_fill_gradient(low = "#323844", high = "#d63631", name = legend) +
+  #scale_fill_viridis(na.value = "grey", name = legend) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.border = element_blank()) +
+  labs(title = title,
+       caption = caption)
+}
+
+make_map(overall_index, title = "Rental Insecurity Index", 
+         legend = "Compared to \n peer cities", 
+         caption = "This is the Urban Institute's Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky).")
+```
+
