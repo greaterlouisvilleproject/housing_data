@@ -688,12 +688,55 @@ mult100 <- function(x){
   x <- x * 100
 }
 
+# Replicate binary decision tree to determine most-interior point of polygons
+# This runs well enough for me, but nothing appears when I try using it in the code below
+buffers <- c()
+for(d in 1:26) {
+  buff_max = -0.06
+  buff_min = 0
+  this_buffer = buff_min
+  this_step = buff_max
+  current_resolution = 11
+  
+  while(current_resolution > 10){
+  
+    #browser()
+    # Buffer inside the polygon using this_buffer
+    temp_sf <- st_buffer(metro_sf[d,], dist = this_buffer, singleSide = T) 
+  
+    # Calculate area of polygon
+    temp_area = st_area(temp_sf) %>% as.numeric()
+    
+    # If remaining area > 0, enlarge buffer by going away from 0. 
+    #   Also record most recent correct buffer and area produced by buffer.
+    # If remaining area is 0, reduce buffer by going toward 0.
+    if (temp_area > 0) {
+      current_result = this_buffer
+      current_resolution = temp_area
+      
+      this_buffer = this_buffer + this_step
+    } else {
+      this_buffer = this_buffer - this_step
+    }
+    
+    # Cut search step in half
+    this_step = this_step / 2
+  }
+  
+  buffers <- c(buffers, current_result)
+  
+}
+
 metro_sf <- metro_sf %>%
   mutate(across(starts_with("perc_"), mult100))
 
-make_map <- function(indicator, title = "", legend = "", caption = ""){
+metro_map <- function(indicator, title = "", legend = "", caption = ""){
   ggplot(metro_sf) + 
   geom_sf(aes(fill={{ indicator }} )) +
+  # Add District labels 
+  geom_sf_text(aes(label = district), color = "white") +
+  #geom_sf_text(aes(label = district), family = "Montserrat Bold", fontface = "bold", size = 6, color = "#ffffff",
+  #             fun.geometry = function(x) st_buffer(x, dist = buffers, singleSide = T) %>% st_point_on_surface()) +
   scale_fill_gradient(low = "#323844", high = "#d63631", name = legend) +
   #scale_fill_viridis(na.value = "grey", name = legend) +
   theme_bw() +
@@ -706,8 +749,129 @@ make_map <- function(indicator, title = "", legend = "", caption = ""){
        caption = caption)
 }
 
-make_map(overall_index, title = "Rental Insecurity Index", 
+metro_map(overall_index, title = "Rental Insecurity Index", 
          legend = "Compared to \n peer cities", 
          caption = "This is the Urban Institute's Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky).")
+```
+
+```{r}
+metro_map(housing_instability_index, title = "Housing Instability Subindex", 
+         legend = "Compared to \n peer cities", 
+         caption = "This is the Urban Institute's Housing Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+```
+
+## Covid 19 Impact Subindex
+
+- Share of adults without health insurance
+- Share of low-income jobs lost to Covid-19
+
+```{r}
+metro_map(covid_index, title = "Covid Instability Subindex", 
+         legend = "Compared to \n peer cities", 
+         caption = "This is the Urban Institute's Covid Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+```
+
+## Equity Subindex
+
+- Share of people of color
+- Share of extremely low-income renter households
+- Share of households receiving public assistance
+- Share of people born outside the United States
+
+```{r}
+metro_map(equity_index, title = "Equity Subindex", 
+         legend = "Compared to \n peer cities", 
+         caption = "This is the Urban Institute's Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+```
+
+# Housing Instability Indicators {.tabset .tabset-fade .tabset-pills}
+
+## Poverty
+
+```{r}
+metro_map(perc_poverty_12mnth, title = "Poverty", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Percent Renting
+
+```{r}
+metro_map(perc_renters, title = "Percent of Renter Occupied Housing Units", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Cost-burdened housholds
+
+```{r}
+metro_map(perc_cost_burdened_under_35k, title = "Costburdened Households making under 35k", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Overcrowding
+
+```{r}
+metro_map(perc_overcrowding_renter_1.50_or_more, title = "Overcrowding in Rental Housing", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Unemployed
+
+```{r}
+metro_map(perc_unemployed_laborforce, title = "Unemployment", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+# Covid Indicators {.tabset .tabset-fade .tabset-pills}
+
+## No Health Insurance
+
+```{r}
+metro_map(perc_no_hinsure, title = "No Health Insurance", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Low Income Jobs Lost to Covid
+
+```{r}
+metro_map(perc_low_income_jobs_lost, title = "Low Income Jobs Lost to Covid", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+# Equity Index {.tabset .tabset-fade .tabset-pills}
+
+## Percent PoC
+
+```{r}
+metro_map(perc_person_of_color, title = "Percent Persons of Color", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Extremely Low Income
+```{r}
+metro_map(perc_30hamfi, title = "Extremely Low Income", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Public Assistance
+```{r}
+metro_map(perc_public_assistance, title = "Recieving Public Assistance", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
+```
+
+## Foreign Born
+```{r}
+metro_map(perc_foreign_born, title = "Foreign Born", 
+         legend = "Percent", 
+         caption = "Data from Urban Institute")
 ```
 
