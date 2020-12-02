@@ -1,7 +1,7 @@
 ---
 title: "Rental Instability in Louisville"
 author: "Greater Louisville Project"
-date: '2020-11-17'
+date: '2020-12-02'
 output:
   html_document:
     toc: yes
@@ -16,6 +16,32 @@ This recreates the Urban Institute's [Emergency Rental Assistance Priority Index
 Greater Louisville Project has also aggregated the data up to the metro council district level. That data is available in both maps and tables. 
 
 In addition to the indexes, the indicators that make up the indexes are also mapped below. Navigation is based on tabs, so clicking on the small blue titles brings up the map related to each title. 
+
+## Methods and Definitions
+
+To produce an index with multiple indicators on different scales we used z-scores, which are a measure of how far away from average an observation is. For example, if looking at unemployment, we start with the unemployment rate in all tracts and the score for an individual tract is the number of standard deviations it is away from the average tract.
+
+Data is from the Urban Institute's [Emergency Rental Assistance Priority Index](https://www.urban.org/features/where-prioritize-emergency-rental-assistance-keep-renters-their-homes) and in most cases is tract level census data from 2018. The low income jobs lost to Covid is an [Urban Institute constructed indicator](https://www.urban.org/features/where-low-income-jobs-are-being-lost-covid-19). Complete details on the indicators can be found in the [technical appendix](https://www.urban.org/sites/default/files/2020/08/24/where_to_prioritize_emergency_rental_assistance_to_keep_renters_in_their_homes_technical_appendix.pdf), but they are summarized here for convenience. 
+
+### Housing Instability Index
+
+- Poverty: Under the poverty line in the last 12 months
+- Percent Renting: The percent of households in the area who rent
+- Cost Burdened: Households making less than 35,000 and paying more than 50% of their income in rent
+- Overcrowding: Households renting and with more than 1.5 people per room.
+- Unemployed: In the labor force but not currently employed.
+
+### Covid Index
+
+- Health Insurance: Based on the noninstitutionalized population ages 19-64.
+- Low Income Job Loss from Covid: Estimated jobs lost to Covid based on previous [Urban Institute Study](https://www.urban.org/features/where-low-income-jobs-are-being-lost-covid-19)
+
+### Equity Index
+
+- Percent Persons of Color: Percent of people in the area who identify as persons of color
+- Extremely Low Income: Renter occupied household making less than 30 percent of area median income
+- Public Assistance: Percent receiving some form of public assistance like SNAP or TANF
+- Foreign Born: Percent born outside the U.S.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -84,8 +110,8 @@ jfco_sf <- jfco_sf %>%
 make_map <- function(indicator, title = "", legend = "", caption = ""){
   ggplot(jfco_sf) + 
   geom_sf(aes(fill={{ indicator }} )) +
-  scale_fill_gradient(low = "#323844", high = "#d63631", name = "Percent") +
-  #scale_fill_viridis(na.value = "grey", name = legend) +
+  # scale_fill_gradient(low = "#323844", high = "#d63631", name = "Percent") +
+  scale_fill_viridis(na.value = "grey", name = legend) +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.text = element_blank(),
@@ -293,8 +319,8 @@ ranking <- function(df, var, plot_title = "",
     color_values <- c("#d63631", "#323844")
     color_names <- c("gray", "red")
     
-    df$color <- "gray"
-    df$color[df$city == "Louisville"] <- "red"
+    df$color <- "red"
+    df$color[df$city == "Louisville"] <- "gray"
   } else {
     df$color <- "blue"
     color_values <- "#f58021"
@@ -741,8 +767,8 @@ metro_map <- function(indicator, title = "", legend = "", caption = ""){
   geom_sf_text(aes(label = district), color = "white") +
   #geom_sf_text(aes(label = district), family = "Montserrat Bold", fontface = "bold", size = 6, color = "#ffffff",
   #             fun.geometry = function(x) st_buffer(x, dist = buffers, singleSide = T) %>% st_point_on_surface()) +
-  scale_fill_gradient(low = "#323844", high = "#d63631", name = legend) +
-  #scale_fill_viridis(na.value = "grey", name = legend) +
+  # scale_fill_gradient(low = "#323844", high = "#d63631", name = legend) +
+  scale_fill_viridis(na.value = "grey", name = legend) +
   theme_bw() +
   theme(panel.grid = element_blank(),
         axis.text = element_blank(),
@@ -1019,28 +1045,3 @@ metro_equity_tbl <- metro_sf %>%
 
 metro_equity_tbl
 ```
-
-# Appendix: Measure Definitions
-
-Data is from the Urban Institute's [Emergency Rental Assistance Priority Index](https://www.urban.org/features/where-prioritize-emergency-rental-assistance-keep-renters-their-homes) and in most cases is tract level census data from 2018. The low income jobs lost to Covid is an [Urban Institute constructed indicator](https://www.urban.org/features/where-low-income-jobs-are-being-lost-covid-19). Complete details on the indicators can be found in the [technical appendix](https://www.urban.org/sites/default/files/2020/08/24/where_to_prioritize_emergency_rental_assistance_to_keep_renters_in_their_homes_technical_appendix.pdf), but they are summarized here for convenience. 
-
-## Housing Instability Index
-
-- Poverty: Under the poverty line in the last 12 months
-- Percent Renting: The percent of households in the area who rent
-- Cost Burdened: Households making less than 35,000 and paying more than 50% of their income in rent
-- Overcrowding: Households renting and with more than 1.5 people per room.
-- Unemployed: In the labor force but not currently employed.
-
-## Covid Index
-
-- Health Insurance: Based on the noninstitutionalized population ages 19-64.
-- Low Income Job Loss from Covid: Estimated jobs lost to Covid based on previous [Urban Institute Study](https://www.urban.org/features/where-low-income-jobs-are-being-lost-covid-19)
-
-## Equity Index
-
-- Percent Persons of Color: Percent of people in the area who identify as persons of color
-- Extremely Low Income: Renter occupied household making less than 30 percent of area median income
-- Public Assistance: Percent receiving some form of public assistance like SNAP or TANF
-- Foreign Born: Percent born outside the U.S.
-
