@@ -107,8 +107,8 @@ mult100 <- function(x){
 jfco_sf <- jfco_sf %>%
   mutate(across(starts_with("perc_"), mult100))
 
-make_map <- function(indicator, title = "", legend = "", caption = ""){
-  ggplot(jfco_sf) + 
+make_map <- function(indicator, title = "", legend = "", caption = "", no_legend = FALSE){
+  plt <- ggplot(jfco_sf) + 
   geom_sf(aes(fill={{ indicator }} )) +
   # scale_fill_gradient(low = "#323844", high = "#d63631", name = "Percent") +
   scale_fill_viridis(na.value = "grey", name = legend) +
@@ -120,11 +120,18 @@ make_map <- function(indicator, title = "", legend = "", caption = ""){
         panel.border = element_blank()) +
   labs(title = title,
        caption = caption)
+  
+  if (no_legend == TRUE){
+    plt <- plt + theme(legend.position = "none")
+  }
+  
+  return(plt)
 }
 
 make_map(overall_index, title = "Rental Insecurity Index", 
          legend = "Compared to \n other tracts", 
-         caption = "This is the Urban Institute's Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+         caption = "Lighter shades indicate higher rental insecurity. \n This is the Urban Institute's Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index",
+         no_legend = TRUE)
 ```
 
 You can flip through the tabs below to see each of the three subindexes that make up the overall rental index.
@@ -140,7 +147,8 @@ You can flip through the tabs below to see each of the three subindexes that mak
 ```{r}
 make_map(housing_instability_index, title = "Housing Instability Subindex", 
          legend = "Compared to \n other tracts", 
-         caption = "This is the Urban Institute's Housing Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+         caption = "Lighter shades indicate higher housing instability. \n This is the Urban Institute's Housing Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index",
+         no_legend = TRUE)
 ```
 
 ## Covid 19 Impact Subindex
@@ -151,7 +159,8 @@ make_map(housing_instability_index, title = "Housing Instability Subindex",
 ```{r}
 make_map(covid_index, title = "Covid Instability Subindex", 
          legend = "Compared to \n other tracts", 
-         caption = "This is the Urban Institute's Covid Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+         caption = "Lighter shades indicate higher covid instability. \n This is the Urban Institute's Covid Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index",
+         no_legend = TRUE)
 ```
 
 ## Equity Subindex
@@ -164,7 +173,8 @@ make_map(covid_index, title = "Covid Instability Subindex",
 ```{r}
 make_map(equity_index, title = "Equity Subindex", 
          legend = "Compared to \n other tracts", 
-         caption = "This is the Urban Institute's Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+         caption = "Lighter shades indicate higher prioritization based on equity. \n This is the Urban Institute's Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index",
+         no_legend = TRUE)
 ```
 
 # Housing Instability Indicators {.tabset .tabset-fade .tabset-pills}
@@ -174,7 +184,7 @@ make_map(equity_index, title = "Equity Subindex",
 ```{r}
 make_map(perc_poverty_12mnth, title = "Poverty", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of each census tract that is in poverty. \n Data from Urban Institute.")
 ```
 
 ## Percent Renting
@@ -182,7 +192,7 @@ make_map(perc_poverty_12mnth, title = "Poverty",
 ```{r}
 make_map(perc_renters, title = "Percent of Renter Occupied Housing Units", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of each tract that rents. \n Data from Urban Institute")
 ```
 
 ## Cost-burdened housholds
@@ -190,7 +200,7 @@ make_map(perc_renters, title = "Percent of Renter Occupied Housing Units",
 ```{r}
 make_map(perc_cost_burdened_under_35k, title = "Costburdened Households making under 35k", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of households making less than 35,000 and paying more than 50% of their income in rent. \n Data from Urban Institute")
 ```
 
 ## Overcrowding
@@ -198,7 +208,7 @@ make_map(perc_cost_burdened_under_35k, title = "Costburdened Households making u
 ```{r}
 make_map(perc_overcrowding_renter_1.50_or_more, title = "Overcrowding in Rental Housing", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of households renting and with more than 1.5 people per room. \n Data from Urban Institute")
 ```
 
 ## Unemployed
@@ -206,7 +216,7 @@ make_map(perc_overcrowding_renter_1.50_or_more, title = "Overcrowding in Rental 
 ```{r}
 make_map(perc_unemployed_laborforce, title = "Unemployment", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of people unemployed but still in the labor force (actively seeking work). \n Data from Urban Institute")
 ```
 
 # Covid Indicators {.tabset .tabset-fade .tabset-pills}
@@ -216,7 +226,7 @@ make_map(perc_unemployed_laborforce, title = "Unemployment",
 ```{r}
 make_map(perc_no_hinsure, title = "No Health Insurance", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent without health insurance. \n Data from Urban Institute")
 ```
 
 ## Low Income Jobs Lost to Covid
@@ -224,7 +234,7 @@ make_map(perc_no_hinsure, title = "No Health Insurance",
 ```{r}
 make_map(perc_low_income_jobs_lost, title = "Low Income Jobs Lost to Covid", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Estimate from the Urban Institute based on job categories in the each tract. \n Data from Urban Institute")
 ```
 
 # Equity Index {.tabset .tabset-fade .tabset-pills}
@@ -234,31 +244,33 @@ make_map(perc_low_income_jobs_lost, title = "Low Income Jobs Lost to Covid",
 ```{r}
 make_map(perc_person_of_color, title = "Percent Persons of Color", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of persons in the area who identify as persons of color. \n Data from Urban Institute")
 ```
 
 ## Extremely Low Income
 ```{r}
 make_map(perc_30hamfi, title = "Extremely Low Income", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Renter occupied household making less than 30 percent of area median income. \n Data from Urban Institute")
 ```
 
 ## Public Assistance
 ```{r}
 make_map(perc_public_assistance, title = "Recieving Public Assistance", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent receiving some form of public assistance like SNAP or TANF. \n Data from Urban Institute")
 ```
 
 ## Foreign Born
 ```{r}
 make_map(perc_foreign_born, title = "Foreign Born", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent born outside the U.S. \n Data from Urban Institute")
 ```
 
 # Peer City Data {.tabset .tabset-fade .tabset-pills}
+
+Peer city data is available for the housing stability subindex. 
 
 ```{r}
 # set up fonts
@@ -760,8 +772,8 @@ for(d in 1:26) {
 metro_sf <- metro_sf %>%
   mutate(across(starts_with("perc_"), mult100))
 
-metro_map <- function(indicator, title = "", legend = "", caption = ""){
-  ggplot(metro_sf) + 
+metro_map <- function(indicator, title = "", legend = "", caption = "", no_legend = FALSE){
+  plt <- ggplot(metro_sf) + 
   geom_sf(aes(fill={{ indicator }} )) +
   # Add District labels 
   geom_sf_text(aes(label = district), color = "white") +
@@ -777,35 +789,45 @@ metro_map <- function(indicator, title = "", legend = "", caption = ""){
         panel.border = element_blank()) +
   labs(title = title,
        caption = caption)
+  
+  if (no_legend == TRUE){
+    plt <- plt + theme(legend.position = "none")
+  }
+  
+  return(plt)
 }
 
 metro_map(overall_index, title = "Rental Insecurity Index", 
-         legend = "Compared to \n peer cities", 
-         caption = "This is the Urban Institute's Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky).")
+         legend = "Compared to \n other tracts", 
+         caption = "Lighter shades indicate higher rental insecurity. \n This is the Urban Institute's Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index",
+         no_legend = TRUE)
 ```
 
 ## Housing Instability Subindex
 
 ```{r}
 metro_map(housing_instability_index, title = "Housing Instability Subindex", 
-         legend = "Compared to \n peer cities", 
-         caption = "This is the Urban Institute's Housing Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+         legend = "Compared to \n other tracts", 
+         caption = "Lighter shades indicate higher housing instability. \n This is the Urban Institute's Housing Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index",
+         no_legend = TRUE)
 ```
 
 ## Covid 19 Impact Subindex
 
 ```{r}
 metro_map(covid_index, title = "Covid Instability Subindex", 
-         legend = "Compared to \n peer cities", 
-         caption = "This is the Urban Institute's Covid Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+         legend = "Compared to \n other tracts", 
+         caption = "Lighter shades indicate higher covid instability. \n This is the Urban Institute's Covid Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index",
+         no_legend = TRUE)
 ```
 
 ## Equity Subindex
 
 ```{r}
 metro_map(equity_index, title = "Equity Subindex", 
-         legend = "Compared to \n peer cities", 
-         caption = "This is the Urban Institute's Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index")
+         legend = "Compared to \n other tracts", 
+         caption = "Lighter shades indicate higher prioritization based on equity. \n This is the Urban Institute's Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index",
+         no_legend = TRUE)
 ```
 
 ## Poverty
@@ -813,7 +835,7 @@ metro_map(equity_index, title = "Equity Subindex",
 ```{r}
 metro_map(perc_poverty_12mnth, title = "Poverty", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of each census tract that is in poverty. \n Data from Urban Institute.")
 ```
 
 ## Percent Renting
@@ -821,7 +843,7 @@ metro_map(perc_poverty_12mnth, title = "Poverty",
 ```{r}
 metro_map(perc_renters, title = "Percent of Renter Occupied Housing Units", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of each tract that rents. \n Data from Urban Institute")
 ```
 
 ## Cost-burdened housholds
@@ -829,7 +851,7 @@ metro_map(perc_renters, title = "Percent of Renter Occupied Housing Units",
 ```{r}
 metro_map(perc_cost_burdened_under_35k, title = "Costburdened Households making under 35k", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of households making less than 35,000 and paying more than 50% of their income in rent. \n Data from Urban Institute")
 ```
 
 ## Overcrowding
@@ -837,7 +859,7 @@ metro_map(perc_cost_burdened_under_35k, title = "Costburdened Households making 
 ```{r}
 metro_map(perc_overcrowding_renter_1.50_or_more, title = "Overcrowding in Rental Housing", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of households renting and with more than 1.5 people per room. \n Data from Urban Institute")
 ```
 
 ## Unemployed
@@ -845,7 +867,7 @@ metro_map(perc_overcrowding_renter_1.50_or_more, title = "Overcrowding in Rental
 ```{r}
 metro_map(perc_unemployed_laborforce, title = "Unemployment", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of people unemployed but still in the labor force (actively seeking work). \n Data from Urban Institute")
 ```
 
 ## No Health Insurance
@@ -853,7 +875,7 @@ metro_map(perc_unemployed_laborforce, title = "Unemployment",
 ```{r}
 metro_map(perc_no_hinsure, title = "No Health Insurance", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent without health insurance. \n Data from Urban Institute")
 ```
 
 ## Low Income Jobs Lost to Covid
@@ -861,7 +883,7 @@ metro_map(perc_no_hinsure, title = "No Health Insurance",
 ```{r}
 metro_map(perc_low_income_jobs_lost, title = "Low Income Jobs Lost to Covid", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Estimate from the Urban Institute based on job categories in the each tract. \n Data from Urban Institute")
 ```
 
 ## Percent PoC
@@ -869,7 +891,7 @@ metro_map(perc_low_income_jobs_lost, title = "Low Income Jobs Lost to Covid",
 ```{r}
 metro_map(perc_person_of_color, title = "Percent Persons of Color", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent of persons in the area who identify as persons of color. \n Data from Urban Institute")
 ```
 
 ## Extremely Low Income
@@ -877,21 +899,21 @@ metro_map(perc_person_of_color, title = "Percent Persons of Color",
 ```{r}
 metro_map(perc_30hamfi, title = "Extremely Low Income", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Renter occupied household making less than 30 percent of area median income. \n Data from Urban Institute")
 ```
 
 ## Public Assistance
 ```{r}
 metro_map(perc_public_assistance, title = "Recieving Public Assistance", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent receiving some form of public assistance like SNAP or TANF. \n Data from Urban Institute")
 ```
 
 ## Foreign Born
 ```{r}
 metro_map(perc_foreign_born, title = "Foreign Born", 
          legend = "Percent", 
-         caption = "Data from Urban Institute")
+         caption = "Percent born outside the U.S. \n Data from Urban Institute")
 ```
 
 # Metro Council Tables {.tabset .tabset-fade .tabset-pills}
