@@ -398,6 +398,14 @@ make_map &lt;- function(indicator, title = &quot;&quot;, legend = &quot;&quot;, 
     plt &lt;- plt + theme(legend.position = &quot;none&quot;)
   }
   
+  plt &lt;- plt +
+    theme(
+      panel.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the panel
+      plot.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the plot
+      legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
+      legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
+      legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA))
+  
   return(plt)
 }
 
@@ -405,7 +413,7 @@ make_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
          legend = &quot;Compared to \n other tracts&quot;, 
          caption = &quot;Lighter shades indicate higher rental insecurity. \n This is the Urban Institute&#39;s Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index&quot;,
          no_legend = TRUE)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/rental_insecurity_index-1.png" width="672" /></p>
 <p>You can flip through the tabs below to see each of the three subindexes that make up the overall rental index.</p>
 <div id="housing-instability-subindex" class="section level2">
 <h2>Housing Instability Subindex</h2>
@@ -420,7 +428,7 @@ make_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
          legend = &quot;Compared to \n other tracts&quot;, 
          caption = &quot;Lighter shades indicate higher housing instability. \n This is the Urban Institute&#39;s Housing Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index&quot;,
          no_legend = TRUE)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/housing_instability_subindex-1.png" width="672" /></p>
 </div>
 <div id="covid-19-impact-subindex" class="section level2">
 <h2>Covid 19 Impact Subindex</h2>
@@ -432,7 +440,7 @@ make_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
          legend = &quot;Compared to \n other tracts&quot;, 
          caption = &quot;Lighter shades indicate higher covid instability. \n This is the Urban Institute&#39;s Covid Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index&quot;,
          no_legend = TRUE)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/covid_19_impact_subindex-1.png" width="672" /></p>
 </div>
 <div id="equity-subindex" class="section level2">
 <h2>Equity Subindex</h2>
@@ -446,7 +454,7 @@ make_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
          legend = &quot;Compared to \n other tracts&quot;, 
          caption = &quot;Lighter shades indicate higher prioritization based on equity. \n This is the Urban Institute&#39;s Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index&quot;,
          no_legend = TRUE)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/equity_subindex-1.png" width="672" /></p>
 </div>
 </div>
 <div id="housing-instability-indicators" class="section level1 tabset tabset-fade tabset-pills">
@@ -456,35 +464,35 @@ make_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
 <pre class="r"><code>make_map(perc_poverty_12mnth, title = &quot;Poverty&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of each census tract that is in poverty. \n Data from Urban Institute.&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/poverty-1.png" width="672" /></p>
 </div>
 <div id="percent-renting" class="section level2">
 <h2>Percent Renting</h2>
 <pre class="r"><code>make_map(perc_renters, title = &quot;Percent of Renter Occupied Housing Units&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of each tract that rents. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/renting-1.png" width="672" /></p>
 </div>
 <div id="cost-burdened-housholds" class="section level2">
 <h2>Cost-burdened housholds</h2>
 <pre class="r"><code>make_map(perc_cost_burdened_under_35k, title = &quot;Costburdened Households making under 35k&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of households making less than 35,000 and paying more than 50% of their income in rent. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/cost_burdened-1.png" width="672" /></p>
 </div>
 <div id="overcrowding" class="section level2">
 <h2>Overcrowding</h2>
 <pre class="r"><code>make_map(perc_overcrowding_renter_1.50_or_more, title = &quot;Overcrowding in Rental Housing&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of households renting and with more than 1.5 people per room. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/overcrowding-1.png" width="672" /></p>
 </div>
 <div id="unemployed" class="section level2">
 <h2>Unemployed</h2>
 <pre class="r"><code>make_map(perc_unemployed_laborforce, title = &quot;Unemployment&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of people unemployed but still in the labor force (actively seeking work). \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unemployment-1.png" width="672" /></p>
 </div>
 </div>
 <div id="covid-indicators" class="section level1 tabset tabset-fade tabset-pills">
@@ -494,14 +502,14 @@ make_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
 <pre class="r"><code>make_map(perc_no_hinsure, title = &quot;No Health Insurance&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent without health insurance. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/no_health_insurance-1.png" width="672" /></p>
 </div>
 <div id="low-income-jobs-lost-to-covid" class="section level2">
 <h2>Low Income Jobs Lost to Covid</h2>
 <pre class="r"><code>make_map(perc_low_income_jobs_lost, title = &quot;Low Income Jobs Lost to Covid&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Estimate from the Urban Institute based on job categories in the each tract. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/low_income_job_loss-1.png" width="672" /></p>
 </div>
 </div>
 <div id="equity-index-1" class="section level1 tabset tabset-fade tabset-pills">
@@ -511,28 +519,28 @@ make_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
 <pre class="r"><code>make_map(perc_person_of_color, title = &quot;Percent Persons of Color&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of persons in the area who identify as persons of color. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/people_of_color-1.png" width="672" /></p>
 </div>
 <div id="extremely-low-income" class="section level2">
 <h2>Extremely Low Income</h2>
 <pre class="r"><code>make_map(perc_30hamfi, title = &quot;Extremely Low Income&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Renter occupied household making less than 30 percent of area median income. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/extremely_low_income-1.png" width="672" /></p>
 </div>
 <div id="public-assistance" class="section level2">
 <h2>Public Assistance</h2>
 <pre class="r"><code>make_map(perc_public_assistance, title = &quot;Recieving Public Assistance&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent receiving some form of public assistance like SNAP or TANF. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/public_assistance-1.png" width="672" /></p>
 </div>
 <div id="foreign-born" class="section level2">
 <h2>Foreign Born</h2>
 <pre class="r"><code>make_map(perc_foreign_born, title = &quot;Foreign Born&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent born outside the U.S. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/foreign_born-1.png" width="672" /></p>
 </div>
 </div>
 <div id="peer-city-data" class="section level1 tabset tabset-fade tabset-pills">
@@ -668,7 +676,7 @@ ranking &lt;- function(df, var, plot_title = &quot;&quot;,
                            hjust = text_alignment, 
                            color = factor(label_color),
                            family = textfont),
-                       size = 5 * text_size) +
+                       size = 4.5 * text_size) +
        scale_colour_manual(values=c(&quot;#000000&quot;, &quot;#ffffff&quot;))
     }
   # Add vertical line to the left side of the bars based on the h_line parameter
@@ -676,6 +684,14 @@ ranking &lt;- function(df, var, plot_title = &quot;&quot;,
   # Add remaining text
   p &lt;- p + labs(title = plot_title, y = y_title,
                 x = &quot;&quot;, caption = caption_text)
+  
+  p &lt;- p +
+    theme(
+      panel.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the panel
+      plot.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the plot
+      legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
+      legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
+      legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA))
   
   p
 }</code></pre>
@@ -762,7 +778,7 @@ plt_cost_burdened &lt;- ranking(df, &quot;perc_cost_burdened_under_35k&quot;, te
                              plot_title = &quot;Cost Burdened Renters in Households Making Under 35k &quot;)
 
 plt_cost_burdened</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/cost_burdened_renters_ranking-1.png" width="672" /></p>
 </div>
 <div id="overcrowding-1" class="section level2">
 <h2>Overcrowding</h2>
@@ -808,7 +824,7 @@ plt_oc &lt;- ranking(oc_df, &quot;perc_overcrowding_renter_1.50_or_more&quot;, t
                              plot_title = &quot;Overcrowding&quot;)
 
 plt_oc</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/overcrowding_ranking-1.png" width="672" /></p>
 </div>
 <div id="unemployment" class="section level2">
 <h2>Unemployment</h2>
@@ -854,7 +870,7 @@ plt_un &lt;- ranking(un_df, &quot;perc_unemployed_laborforce&quot;, text_size = 
                              plot_title = &quot;Unemployed&quot;)
 
 plt_un</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unemployment_ranking-1.png" width="672" /></p>
 </div>
 <div id="share-renting" class="section level2">
 <h2>Share renting</h2>
@@ -899,7 +915,7 @@ plt_sr &lt;- ranking(sr_df, &quot;perc_renters&quot;, text_size = 2, order = &qu
                              plot_title = &quot;Percent Renters&quot;)
 
 plt_sr</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/renters_ranking-1.png" width="672" /></p>
 </div>
 <div id="poverty-1" class="section level2">
 <h2>Poverty</h2>
@@ -944,7 +960,7 @@ plt_pv &lt;- ranking(pv_df, &quot;perc_poverty_12mnth&quot;, text_size = 2, orde
                              plot_title = &quot;Poverty&quot;)
 
 plt_pv</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/poverty_ranking-1.png" width="672" /></p>
 </div>
 </div>
 <div id="metro-council-district-maps" class="section level1 tabset tabset-fade tabset-pills">
@@ -981,70 +997,53 @@ mult100 &lt;- function(x){
   x &lt;- x * 100
 }
 
-# Replicate binary decision tree to determine most-interior point of polygons
-# This runs well enough for me, but nothing appears when I try using it in the code below
-buffers &lt;- c()
-for(d in 1:26) {
-  buff_max = -0.06
-  buff_min = 0
-  this_buffer = buff_min
-  this_step = buff_max
-  current_resolution = 11
-  
-  while(current_resolution &gt; 10){
-  
-    #browser()
-    # Buffer inside the polygon using this_buffer
-    temp_sf &lt;- st_buffer(metro_sf[d,], dist = this_buffer, singleSide = T) 
-  
-    # Calculate area of polygon
-    temp_area = st_area(temp_sf) %&gt;% as.numeric()
-    
-    # If remaining area &gt; 0, enlarge buffer by going away from 0. 
-    #   Also record most recent correct buffer and area produced by buffer.
-    # If remaining area is 0, reduce buffer by going toward 0.
-    if (temp_area &gt; 0) {
-      current_result = this_buffer
-      current_resolution = temp_area
-      
-      this_buffer = this_buffer + this_step
-    } else {
-      this_buffer = this_buffer - this_step
-    }
-    
-    # Cut search step in half
-    this_step = this_step / 2
-  }
-  
-  buffers &lt;- c(buffers, current_result)
-  
-}
-
 metro_sf &lt;- metro_sf %&gt;%
   mutate(across(starts_with(&quot;perc_&quot;), mult100))
 
+load(&quot;district_label_points.RData&quot;)
+
+district_label_points %&lt;&gt;%
+  mutate(
+    x = unname(st_coordinates(.)[,1]),
+    y = unname(st_coordinates(.)[,2]))
+
+
 metro_map &lt;- function(indicator, title = &quot;&quot;, legend = &quot;&quot;, caption = &quot;&quot;, no_legend = FALSE){
+
   plt &lt;- ggplot(metro_sf) + 
-  geom_sf(aes(fill={{ indicator }} )) +
-  # Add District labels 
-  geom_sf_text(aes(label = district), color = &quot;white&quot;) +
-  #geom_sf_text(aes(label = district), size = 6, color = &quot;#ffffff&quot;,
-  #             fun.geometry = function(x) st_buffer(x, dist = buffers, singleSide = T) %&gt;% st_point_on_surface()) +
-  # scale_fill_gradient(low = &quot;#323844&quot;, high = &quot;#d63631&quot;, name = legend) +
-  scale_fill_viridis(na.value = &quot;grey&quot;, name = legend) +
-  theme_bw(base_size = 22) +
-  theme(plot.caption = element_text(lineheight = .5)) +
-  theme(panel.grid = element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title = element_blank(),
-        panel.border = element_blank()) +
-  labs(title = title,
-       caption = caption)
+    geom_sf(aes(fill={{ indicator }} )) +
+    # Add District labels 
+    shadowtext::geom_shadowtext(data = district_label_points,
+                                aes(x = x, y=y, label = district),
+                                family = &quot;Montserrat Bold&quot;, size = 8,
+                                color = &quot;white&quot;, bg.color=&quot;black&quot;) +
+    #geom_sf(data = district_label_points, aes(color =district)) +
+    #geom_sf_text(aes(label = district), color = &quot;white&quot;) +
+    #geom_sf_text(aes(label = district), size = 6, color = &quot;#ffffff&quot;,
+    #             fun.geometry = function(x) st_buffer(x, dist = buffers, singleSide = T) %&gt;% st_point_on_surface()) +
+    # scale_fill_gradient(low = &quot;#323844&quot;, high = &quot;#d63631&quot;, name = legend) +
+    scale_fill_viridis(na.value = &quot;grey&quot;, name = legend) +
+    theme_bw(base_size = 22, base_family = &quot;Montserrat&quot;) +
+    theme(plot.caption = element_text(lineheight = .5)) +
+    theme(panel.grid = element_blank(),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title = element_blank(),
+          panel.border = element_blank()) +
+    labs(title = title,
+         caption = caption)
   
   if (no_legend == TRUE){
     plt &lt;- plt + theme(legend.position = &quot;none&quot;)
   }
+  
+  plt &lt;- plt +
+    theme(
+      panel.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the panel
+      plot.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the plot
+      legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
+      legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
+      legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA))
   
   return(plt)
 }
@@ -1053,7 +1052,7 @@ metro_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
          legend = &quot;Compared to \n other tracts&quot;, 
          caption = &quot;Lighter shades indicate higher rental insecurity. \n This is the Urban Institute&#39;s Emergency Rental Assistance Priority Index modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index&quot;,
          no_legend = TRUE)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/rental_insecurity_index_council-1.png" width="672" /></p>
 </div>
 <div id="housing-instability-subindex-1" class="section level2">
 <h2>Housing Instability Subindex</h2>
@@ -1061,7 +1060,7 @@ metro_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
          legend = &quot;Compared to \n other tracts&quot;, 
          caption = &quot;Lighter shades indicate higher housing instability. \n This is the Urban Institute&#39;s Housing Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index&quot;,
          no_legend = TRUE)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/housing_instability_subindex_council-1.png" width="672" /></p>
 </div>
 <div id="covid-19-impact-subindex-1" class="section level2">
 <h2>Covid 19 Impact Subindex</h2>
@@ -1069,7 +1068,7 @@ metro_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
          legend = &quot;Compared to \n other tracts&quot;, 
          caption = &quot;Lighter shades indicate higher covid instability. \n This is the Urban Institute&#39;s Covid Instability subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index&quot;,
          no_legend = TRUE)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/covid_19_impact_subindex_council-1.png" width="672" /></p>
 </div>
 <div id="equity-subindex-1" class="section level2">
 <h2>Equity Subindex</h2>
@@ -1077,84 +1076,84 @@ metro_map(overall_index, title = &quot;Rental Insecurity Index&quot;,
          legend = &quot;Compared to \n other tracts&quot;, 
          caption = &quot;Lighter shades indicate higher prioritization based on equity. \n This is the Urban Institute&#39;s Equity subindex modified \nto compare Louisville to its peer cities (instead of to other areas in Kentucky). \n Greyed out areas had insufficient data for the index&quot;,
          no_legend = TRUE)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/equity_subindex_council-1.png" width="672" /></p>
 </div>
 <div id="poverty-2" class="section level2">
 <h2>Poverty</h2>
 <pre class="r"><code>metro_map(perc_poverty_12mnth, title = &quot;Poverty&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of each census tract that is in poverty. \n Data from Urban Institute.&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/poverty_council-1.png" width="672" /></p>
 </div>
 <div id="percent-renting-1" class="section level2">
 <h2>Percent Renting</h2>
 <pre class="r"><code>metro_map(perc_renters, title = &quot;Percent of Renter Occupied Housing Units&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of each tract that rents. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/renting_council-1.png" width="672" /></p>
 </div>
 <div id="cost-burdened-housholds-1" class="section level2">
 <h2>Cost-burdened housholds</h2>
 <pre class="r"><code>metro_map(perc_cost_burdened_under_35k, title = &quot;Costburdened Households making under 35k&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of households making less than 35,000 and paying more than 50% of their income in rent. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/cost_burdened_council-1.png" width="672" /></p>
 </div>
 <div id="overcrowding-2" class="section level2">
 <h2>Overcrowding</h2>
 <pre class="r"><code>metro_map(perc_overcrowding_renter_1.50_or_more, title = &quot;Overcrowding in Rental Housing&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of households renting and with more than 1.5 people per room. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/overcrowding_council-1.png" width="672" /></p>
 </div>
 <div id="unemployed-1" class="section level2">
 <h2>Unemployed</h2>
 <pre class="r"><code>metro_map(perc_unemployed_laborforce, title = &quot;Unemployment&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of people unemployed but still in the labor force (actively seeking work). \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unemployed_council-1.png" width="672" /></p>
 </div>
 <div id="no-health-insurance-1" class="section level2">
 <h2>No Health Insurance</h2>
 <pre class="r"><code>metro_map(perc_no_hinsure, title = &quot;No Health Insurance&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent without health insurance. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/no_health_insurance_council-1.png" width="672" /></p>
 </div>
 <div id="low-income-jobs-lost-to-covid-1" class="section level2">
 <h2>Low Income Jobs Lost to Covid</h2>
 <pre class="r"><code>metro_map(perc_low_income_jobs_lost, title = &quot;Low Income Jobs Lost to Covid&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Estimate from the Urban Institute based on job categories in the each tract. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/low_income_job_loss_council-1.png" width="672" /></p>
 </div>
 <div id="percent-poc-1" class="section level2">
 <h2>Percent PoC</h2>
 <pre class="r"><code>metro_map(perc_person_of_color, title = &quot;Percent Persons of Color&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent of persons in the area who identify as persons of color. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/people_of_color_council-1.png" width="672" /></p>
 </div>
 <div id="extremely-low-income-1" class="section level2">
 <h2>Extremely Low Income</h2>
 <pre class="r"><code>metro_map(perc_30hamfi, title = &quot;Extremely Low Income&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Renter occupied household making less than 30 percent of area median income. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/extremely_low_income_council-1.png" width="672" /></p>
 </div>
 <div id="public-assistance-1" class="section level2">
 <h2>Public Assistance</h2>
 <pre class="r"><code>metro_map(perc_public_assistance, title = &quot;Recieving Public Assistance&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent receiving some form of public assistance like SNAP or TANF. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/public_assistance_council-1.png" width="672" /></p>
 </div>
 <div id="foreign-born-1" class="section level2">
 <h2>Foreign Born</h2>
 <pre class="r"><code>metro_map(perc_foreign_born, title = &quot;Foreign Born&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Percent born outside the U.S. \n Data from Urban Institute&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/foreign_born_council-1.png" width="672" /></p>
 </div>
 </div>
 <div id="metro-council-tables" class="section level1 tabset tabset-fade tabset-pills">
@@ -1213,7 +1212,7 @@ metro_house_tbl</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#khyvsbqmlj .gt_table {
+#hxyfxemsuy .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1238,7 +1237,7 @@ metro_house_tbl</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_heading {
+#hxyfxemsuy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1250,7 +1249,7 @@ metro_house_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_title {
+#hxyfxemsuy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1260,7 +1259,7 @@ metro_house_tbl</code></pre>
   border-bottom-width: 0;
 }
 
-#khyvsbqmlj .gt_subtitle {
+#hxyfxemsuy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1270,13 +1269,13 @@ metro_house_tbl</code></pre>
   border-top-width: 0;
 }
 
-#khyvsbqmlj .gt_bottom_border {
+#hxyfxemsuy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_col_headings {
+#hxyfxemsuy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1291,7 +1290,7 @@ metro_house_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_col_heading {
+#hxyfxemsuy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1311,7 +1310,7 @@ metro_house_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#khyvsbqmlj .gt_column_spanner_outer {
+#hxyfxemsuy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1323,15 +1322,15 @@ metro_house_tbl</code></pre>
   padding-right: 4px;
 }
 
-#khyvsbqmlj .gt_column_spanner_outer:first-child {
+#hxyfxemsuy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#khyvsbqmlj .gt_column_spanner_outer:last-child {
+#hxyfxemsuy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#khyvsbqmlj .gt_column_spanner {
+#hxyfxemsuy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1343,7 +1342,7 @@ metro_house_tbl</code></pre>
   width: 100%;
 }
 
-#khyvsbqmlj .gt_group_heading {
+#hxyfxemsuy .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1365,7 +1364,7 @@ metro_house_tbl</code></pre>
   vertical-align: middle;
 }
 
-#khyvsbqmlj .gt_empty_group_heading {
+#hxyfxemsuy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1380,15 +1379,15 @@ metro_house_tbl</code></pre>
   vertical-align: middle;
 }
 
-#khyvsbqmlj .gt_from_md > :first-child {
+#hxyfxemsuy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#khyvsbqmlj .gt_from_md > :last-child {
+#hxyfxemsuy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#khyvsbqmlj .gt_row {
+#hxyfxemsuy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1407,7 +1406,7 @@ metro_house_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#khyvsbqmlj .gt_stub {
+#hxyfxemsuy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1419,7 +1418,7 @@ metro_house_tbl</code></pre>
   padding-left: 12px;
 }
 
-#khyvsbqmlj .gt_summary_row {
+#hxyfxemsuy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1429,7 +1428,7 @@ metro_house_tbl</code></pre>
   padding-right: 5px;
 }
 
-#khyvsbqmlj .gt_first_summary_row {
+#hxyfxemsuy .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1439,7 +1438,7 @@ metro_house_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_grand_summary_row {
+#hxyfxemsuy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1449,7 +1448,7 @@ metro_house_tbl</code></pre>
   padding-right: 5px;
 }
 
-#khyvsbqmlj .gt_first_grand_summary_row {
+#hxyfxemsuy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1459,11 +1458,11 @@ metro_house_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_striped {
+#hxyfxemsuy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#khyvsbqmlj .gt_table_body {
+#hxyfxemsuy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1472,7 +1471,7 @@ metro_house_tbl</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_footnotes {
+#hxyfxemsuy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1486,13 +1485,13 @@ metro_house_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_footnote {
+#hxyfxemsuy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#khyvsbqmlj .gt_sourcenotes {
+#hxyfxemsuy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1506,46 +1505,46 @@ metro_house_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#khyvsbqmlj .gt_sourcenote {
+#hxyfxemsuy .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#khyvsbqmlj .gt_left {
+#hxyfxemsuy .gt_left {
   text-align: left;
 }
 
-#khyvsbqmlj .gt_center {
+#hxyfxemsuy .gt_center {
   text-align: center;
 }
 
-#khyvsbqmlj .gt_right {
+#hxyfxemsuy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#khyvsbqmlj .gt_font_normal {
+#hxyfxemsuy .gt_font_normal {
   font-weight: normal;
 }
 
-#khyvsbqmlj .gt_font_bold {
+#hxyfxemsuy .gt_font_bold {
   font-weight: bold;
 }
 
-#khyvsbqmlj .gt_font_italic {
+#hxyfxemsuy .gt_font_italic {
   font-style: italic;
 }
 
-#khyvsbqmlj .gt_super {
+#hxyfxemsuy .gt_super {
   font-size: 65%;
 }
 
-#khyvsbqmlj .gt_footnote_marks {
+#hxyfxemsuy .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="khyvsbqmlj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="hxyfxemsuy" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="7" class="gt_heading gt_title gt_font_normal" style>Table 1: Housing Indicators</th>
@@ -1869,7 +1868,7 @@ metro_covid_tbl</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#atmuryuolk .gt_table {
+#oxfjqhltsa .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1894,7 +1893,7 @@ metro_covid_tbl</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_heading {
+#oxfjqhltsa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1906,7 +1905,7 @@ metro_covid_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_title {
+#oxfjqhltsa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1916,7 +1915,7 @@ metro_covid_tbl</code></pre>
   border-bottom-width: 0;
 }
 
-#atmuryuolk .gt_subtitle {
+#oxfjqhltsa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1926,13 +1925,13 @@ metro_covid_tbl</code></pre>
   border-top-width: 0;
 }
 
-#atmuryuolk .gt_bottom_border {
+#oxfjqhltsa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_col_headings {
+#oxfjqhltsa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1947,7 +1946,7 @@ metro_covid_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_col_heading {
+#oxfjqhltsa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1967,7 +1966,7 @@ metro_covid_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#atmuryuolk .gt_column_spanner_outer {
+#oxfjqhltsa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1979,15 +1978,15 @@ metro_covid_tbl</code></pre>
   padding-right: 4px;
 }
 
-#atmuryuolk .gt_column_spanner_outer:first-child {
+#oxfjqhltsa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#atmuryuolk .gt_column_spanner_outer:last-child {
+#oxfjqhltsa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#atmuryuolk .gt_column_spanner {
+#oxfjqhltsa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1999,7 +1998,7 @@ metro_covid_tbl</code></pre>
   width: 100%;
 }
 
-#atmuryuolk .gt_group_heading {
+#oxfjqhltsa .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2021,7 +2020,7 @@ metro_covid_tbl</code></pre>
   vertical-align: middle;
 }
 
-#atmuryuolk .gt_empty_group_heading {
+#oxfjqhltsa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2036,15 +2035,15 @@ metro_covid_tbl</code></pre>
   vertical-align: middle;
 }
 
-#atmuryuolk .gt_from_md > :first-child {
+#oxfjqhltsa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#atmuryuolk .gt_from_md > :last-child {
+#oxfjqhltsa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#atmuryuolk .gt_row {
+#oxfjqhltsa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2063,7 +2062,7 @@ metro_covid_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#atmuryuolk .gt_stub {
+#oxfjqhltsa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2075,7 +2074,7 @@ metro_covid_tbl</code></pre>
   padding-left: 12px;
 }
 
-#atmuryuolk .gt_summary_row {
+#oxfjqhltsa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2085,7 +2084,7 @@ metro_covid_tbl</code></pre>
   padding-right: 5px;
 }
 
-#atmuryuolk .gt_first_summary_row {
+#oxfjqhltsa .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2095,7 +2094,7 @@ metro_covid_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_grand_summary_row {
+#oxfjqhltsa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2105,7 +2104,7 @@ metro_covid_tbl</code></pre>
   padding-right: 5px;
 }
 
-#atmuryuolk .gt_first_grand_summary_row {
+#oxfjqhltsa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2115,11 +2114,11 @@ metro_covid_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_striped {
+#oxfjqhltsa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#atmuryuolk .gt_table_body {
+#oxfjqhltsa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2128,7 +2127,7 @@ metro_covid_tbl</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_footnotes {
+#oxfjqhltsa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2142,13 +2141,13 @@ metro_covid_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_footnote {
+#oxfjqhltsa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#atmuryuolk .gt_sourcenotes {
+#oxfjqhltsa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2162,46 +2161,46 @@ metro_covid_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#atmuryuolk .gt_sourcenote {
+#oxfjqhltsa .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#atmuryuolk .gt_left {
+#oxfjqhltsa .gt_left {
   text-align: left;
 }
 
-#atmuryuolk .gt_center {
+#oxfjqhltsa .gt_center {
   text-align: center;
 }
 
-#atmuryuolk .gt_right {
+#oxfjqhltsa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#atmuryuolk .gt_font_normal {
+#oxfjqhltsa .gt_font_normal {
   font-weight: normal;
 }
 
-#atmuryuolk .gt_font_bold {
+#oxfjqhltsa .gt_font_bold {
   font-weight: bold;
 }
 
-#atmuryuolk .gt_font_italic {
+#oxfjqhltsa .gt_font_italic {
   font-style: italic;
 }
 
-#atmuryuolk .gt_super {
+#oxfjqhltsa .gt_super {
   font-size: 65%;
 }
 
-#atmuryuolk .gt_footnote_marks {
+#oxfjqhltsa .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="atmuryuolk" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="oxfjqhltsa" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="4" class="gt_heading gt_title gt_font_normal" style>Table 2: Covid Indicators</th>
@@ -2446,7 +2445,7 @@ metro_equity_tbl</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#zwigqvgcgu .gt_table {
+#fodmscfsww .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2471,7 +2470,7 @@ metro_equity_tbl</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_heading {
+#fodmscfsww .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2483,7 +2482,7 @@ metro_equity_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_title {
+#fodmscfsww .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2493,7 +2492,7 @@ metro_equity_tbl</code></pre>
   border-bottom-width: 0;
 }
 
-#zwigqvgcgu .gt_subtitle {
+#fodmscfsww .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2503,13 +2502,13 @@ metro_equity_tbl</code></pre>
   border-top-width: 0;
 }
 
-#zwigqvgcgu .gt_bottom_border {
+#fodmscfsww .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_col_headings {
+#fodmscfsww .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2524,7 +2523,7 @@ metro_equity_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_col_heading {
+#fodmscfsww .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2544,7 +2543,7 @@ metro_equity_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#zwigqvgcgu .gt_column_spanner_outer {
+#fodmscfsww .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2556,15 +2555,15 @@ metro_equity_tbl</code></pre>
   padding-right: 4px;
 }
 
-#zwigqvgcgu .gt_column_spanner_outer:first-child {
+#fodmscfsww .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zwigqvgcgu .gt_column_spanner_outer:last-child {
+#fodmscfsww .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zwigqvgcgu .gt_column_spanner {
+#fodmscfsww .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2576,7 +2575,7 @@ metro_equity_tbl</code></pre>
   width: 100%;
 }
 
-#zwigqvgcgu .gt_group_heading {
+#fodmscfsww .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2598,7 +2597,7 @@ metro_equity_tbl</code></pre>
   vertical-align: middle;
 }
 
-#zwigqvgcgu .gt_empty_group_heading {
+#fodmscfsww .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2613,15 +2612,15 @@ metro_equity_tbl</code></pre>
   vertical-align: middle;
 }
 
-#zwigqvgcgu .gt_from_md > :first-child {
+#fodmscfsww .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zwigqvgcgu .gt_from_md > :last-child {
+#fodmscfsww .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zwigqvgcgu .gt_row {
+#fodmscfsww .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2640,7 +2639,7 @@ metro_equity_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#zwigqvgcgu .gt_stub {
+#fodmscfsww .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2652,7 +2651,7 @@ metro_equity_tbl</code></pre>
   padding-left: 12px;
 }
 
-#zwigqvgcgu .gt_summary_row {
+#fodmscfsww .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2662,7 +2661,7 @@ metro_equity_tbl</code></pre>
   padding-right: 5px;
 }
 
-#zwigqvgcgu .gt_first_summary_row {
+#fodmscfsww .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2672,7 +2671,7 @@ metro_equity_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_grand_summary_row {
+#fodmscfsww .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2682,7 +2681,7 @@ metro_equity_tbl</code></pre>
   padding-right: 5px;
 }
 
-#zwigqvgcgu .gt_first_grand_summary_row {
+#fodmscfsww .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2692,11 +2691,11 @@ metro_equity_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_striped {
+#fodmscfsww .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zwigqvgcgu .gt_table_body {
+#fodmscfsww .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2705,7 +2704,7 @@ metro_equity_tbl</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_footnotes {
+#fodmscfsww .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2719,13 +2718,13 @@ metro_equity_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_footnote {
+#fodmscfsww .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#zwigqvgcgu .gt_sourcenotes {
+#fodmscfsww .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2739,46 +2738,46 @@ metro_equity_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#zwigqvgcgu .gt_sourcenote {
+#fodmscfsww .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#zwigqvgcgu .gt_left {
+#fodmscfsww .gt_left {
   text-align: left;
 }
 
-#zwigqvgcgu .gt_center {
+#fodmscfsww .gt_center {
   text-align: center;
 }
 
-#zwigqvgcgu .gt_right {
+#fodmscfsww .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zwigqvgcgu .gt_font_normal {
+#fodmscfsww .gt_font_normal {
   font-weight: normal;
 }
 
-#zwigqvgcgu .gt_font_bold {
+#fodmscfsww .gt_font_bold {
   font-weight: bold;
 }
 
-#zwigqvgcgu .gt_font_italic {
+#fodmscfsww .gt_font_italic {
   font-style: italic;
 }
 
-#zwigqvgcgu .gt_super {
+#fodmscfsww .gt_super {
   font-size: 65%;
 }
 
-#zwigqvgcgu .gt_footnote_marks {
+#fodmscfsww .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="zwigqvgcgu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="fodmscfsww" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="6" class="gt_heading gt_title gt_font_normal" style>Table 3: Equity Indicators</th>
@@ -3026,20 +3025,20 @@ metro_equity_tbl</code></pre>
 </div>
 <div id="home-mortgages" class="section level1 tabset tabset-fade tabset-pills">
 <h1 class="tabset tabset-fade tabset-pills">Home Mortgages</h1>
-<div id="mortgages-per-person" class="section level2">
-<h2>Mortgages per person</h2>
+<div id="mortgages-by-geography" class="section level2">
+<h2>Mortgages by geography</h2>
 <p>In 2019, about 3.8 mortgages were issued per 100 residents; however, the availability of mortgages varies greatly across the city. Two census tracts saw 0 mortgages issued in 2019, and most of West Louisville saw fewer than 1 mortgage issued per 100 residents. Meanwhile, many areas experienced a much larger availability of mortgages, especially where there is new construction around the edges of the county.</p>
 <pre class="r"><code>home_loan_tract &lt;- glpdata::home_loan_tract
+
+home_loan_tract_race &lt;- home_loan_tract %&gt;%
+  filter(year == 2019, sex == &quot;total&quot;, race != &quot;total&quot;) %&gt;%
+  select(tract, race, denial:rate_spread)
 
 home_loan_tract %&lt;&gt;%
   filter(year == 2019, sex == &quot;total&quot;, race == &quot;total&quot;) %&gt;%
   select(tract, denial:rate_spread)
 
 jfco_sf %&lt;&gt;% left_join(home_loan_tract, by = c(&quot;GEOID&quot; = &quot;tract&quot;))
-
-pal &lt;- leaflet::colorBin(
-  palette = viridis::viridis(5),
-  domain = range(jfco_sf$loan_number_per_100))
 
 loan_num_labs &lt;- c(&quot;No mortgages&quot;, &quot;Less than 1&quot;, &quot;1 to 3&quot;, &quot;3 to 5&quot;, &quot;5 to 10&quot;, &quot;More than 10&quot;)
 
@@ -3059,32 +3058,154 @@ jfco_sf %&lt;&gt;%
 
 ggplot(jfco_sf) + 
   geom_sf(aes(fill = loan_num_fill)) +
-  scale_fill_manual(values = viridis::viridis(6), na.value = &quot;grey&quot;) +
-  theme_bw(base_size = 22) +
+  scale_fill_manual(values = viridis::viridis(6, direction = -1), na.value = &quot;grey&quot;) +
+  theme_bw(base_size = 22, base_family = &quot;Montserrat&quot;) +
   theme(panel.grid = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank(),
         panel.border = element_blank(),
         legend.title = element_blank()) +
-  labs(title = &quot;Mortgages issued per 100 residents in 2019&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+  labs(title = &quot;Mortgages issued per 100 residents in 2019&quot;) +
+  theme(
+    panel.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the panel
+    plot.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the plot
+    legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
+    legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
+    legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA))</code></pre>
+<p><img src="index_files/figure-html/mortgages_per_person-1.png" width="672" /></p>
 </div>
-<div id="denial-rates" class="section level2">
-<h2>Denial Rates</h2>
+<div id="mortgages-by-race" class="section level2">
+<h2>Mortgages by race</h2>
+<p>We can also examine mortgage data by race. Black residents in Louisville received fewer than half the number of mortgages per person that White residents did in 2019.</p>
+<pre class="r"><code># Interactive Mortgage map
+# load(&quot;home_loans_detail.RData&quot;)
+# home_loan_detail %&lt;&gt;%
+#   select(tract, year, race, sex, loan_status, income, loan, rate) %&gt;%
+#   mutate(tract = str_extract(tract, &quot;21111.*&quot;)) %&gt;%
+#   filter(year == 2019, loan_status == &quot;approved&quot;)
+# 
+# num_points &lt;- home_loan_detail %&gt;%
+#   group_by(tract) %&gt;%
+#   summarise(n = n(), .groups=&quot;drop&quot;) %&gt;%
+#   left_join(glptools::map_tract, by = &quot;tract&quot;) %&gt;%
+#   group_by(tract) %&gt;%
+#   nest() %&gt;%
+#   mutate(points = map(data, function(x) st_sample(x$geometry, x$n))) %&gt;%
+#   unnest()
+# 
+# home_loan_detail %&lt;&gt;% arrange(tract)
+# num_points %&lt;&gt;% arrange(tract)
+# 
+# st_geometry(home_loan_detail) &lt;- num_points$points
+# 
+# library(leaflet)
+# 
+# 
+# fillpal &lt;- colorFactor(RColorBrewer::brewer.pal(5, &quot;Dark2&quot;), domain = unique(home_loan_detail$race))
+# 
+# leaflet(filter(home_loan_detail, is.na(race))) %&gt;%
+#   addCircleMarkers(
+#     radius = ~sqrt(loan / 30000),
+#     #radius = 5,
+#     stroke=T,
+#     fillColor = ~fillpal(race),
+#     color = ~fillpal(race),
+#     weight = 1,
+#     fillOpacity = 0.15,
+#     opacity = 0.4) %&gt;%
+#   addLegend(pal = fillpal, values = unique(home_loan_detail$race)) %&gt;%
+#   addTiles()
+
+
+mortgage_county &lt;- glpdata::home_loan_county
+
+plt_by &lt;- function(df, group_var, var, title_text = &quot;Home Mortgages&quot;, 
+                   y_axis = &quot;Percent&quot;, y_min = NA, units = &quot;number&quot;) {
+  var &lt;- enquo(var)
+  group_var &lt;- enquo(group_var)
+
+  text_scale &lt;- 1
+  
+  plt &lt;- ggplot(data = df, aes(x = year, y = !!var, group = !!group_var, colour = !!group_var)) +
+    geom_point(size = 2) +
+    geom_line(size = .65) +
+    theme_bw() +
+    labs(title = title_text, x = &quot;Year&quot;, y = y_axis) +
+    theme(legend.position = &quot;bottom&quot;)
+  
+  plt &lt;- plt  + 
+    scale_colour_manual(values = c(&quot;#323844&quot;, &quot;#d63631&quot;)) +
+    scale_x_continuous(breaks = seq(from = 2007, to = 2019, by = 2)) +
+    theme(text = element_text(family = &quot;Montserrat&quot;),
+          
+          legend.title     = element_text(size = 30 * text_scale),
+          legend.text      = element_text(size = 24 * text_scale,
+                                          margin = margin(b = 0.2 * text_scale, t = 0.2 * text_scale, unit = &quot;cm&quot;)),
+
+          axis.text    = element_text(size = 24 * text_scale),
+          axis.title   = element_text(size = 30 * text_scale),
+          axis.title.x = element_text(margin = margin(t = 0.3 * text_scale, unit = &quot;cm&quot;)),
+          axis.title.y = element_text(margin = margin(r = 0.3 * text_scale, unit = &quot;cm&quot;)),
+      
+          plot.title = element_text(size = 42 * text_scale,
+                                    hjust = .5,
+                                    margin = margin(b = 0.4 * text_scale, unit = &quot;cm&quot;)))
+  
+  if (!is.na(y_min)) {
+    plt &lt;- plt + ylim(y_min, NA)
+  }
+  
+  if(units == &quot;Dollars&quot;) plt &lt;- plt + scale_y_continuous(labels = scales::dollar)
+  if(units == &quot;Percent&quot;) plt &lt;- plt + scale_y_continuous(labels = function(x) scales::percent(x, accuracy = 1, scale = 1))
+
+  plt &lt;- plt +
+    theme(
+      panel.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the panel
+      plot.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the plot
+      legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
+      legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
+      legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA)
+  )
+  
+  plt
+}
+
+mortgage_county %&lt;&gt;% filter(FIPS == &quot;21111&quot;, sex==&quot;total&quot;, race %in% c(&quot;black&quot;, &quot;white&quot;)) %&gt;%
+  rename(Race = race) %&gt;%
+  mutate(Race = str_to_title(Race))
+
+plt_by(mortgage_county, Race, loan_number_per_100, &quot;Mortgages by race&quot;, y_axis = &quot;Mortgages per 100 People&quot;, y_min = 0)</code></pre>
+<p><img src="index_files/figure-html/mortgage_number_race-1.png" width="672" /></p>
+</div>
+<div id="mortgage-dollars-by-race" class="section level2">
+<h2>Mortgage Dollars by race</h2>
+<p>The racial disparity is mortgages is even larger when you incorporate the dollar amount of mortgages issues. In 2019, white residents received $2.60 in mortgages for every $1 that Black residents received after adjusting for population size.</p>
+<pre class="r"><code>plt_by(mortgage_county, Race, loan_amount_pp, &quot;Mortgage Lending by race&quot;, y_axis = &quot;Dollars per 100 People&quot;, y_min = 0,
+       units = &quot;Dollars&quot;)</code></pre>
+<p><img src="index_files/figure-html/mortgage_dollars_race-1.png" width="672" /></p>
+</div>
+<div id="denial-rates-by-race" class="section level2">
+<h2>Denial Rates by Race</h2>
+<p>Black residents are denied mortgages at a rate roughly twice that of white residents. The mortgage denial rate for Black residents has decreased from a high of 29% in 2008 to a low of 14% in 2019. However, it has not shown signs of decreasing in recent years, and Black residents are more likely to be impacted by the economic impacts of COVID-19, worsening the disparity in 2020 and beyond.</p>
+<pre class="r"><code>plt_by(mortgage_county, Race, denial, &quot;Mortgage Denial by race&quot;, y_axis = &quot;Denial Rate&quot;, y_min = 0, units= &quot;Percent&quot;)</code></pre>
+<p><img src="index_files/figure-html/mortgage_denial_race-1.png" width="672" /></p>
+</div>
+<div id="denial-rates-by-geography" class="section level2">
+<h2>Denial Rates by Geography</h2>
 <p>A major factor in mortgage availability is denial rates. While some areas of town saw few to no mortgage denials, people in many parts of West Louisville experienced denial rates of 30 to 40%.</p>
 <pre class="r"><code>make_map(denial, title = &quot;Mortgage Denial Rate in 2019&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Denial rate&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/mortgage_denial-1.png" width="672" /></p>
 </div>
-<div id="interest-rates" class="section level2">
-<h2>Interest Rates</h2>
+<div id="interest-rates-by-geography" class="section level2">
+<h2>Interest Rates by geography</h2>
 <p>For the mortgages that were issued, interest rates varied from around 3.5% to around 5%. While the average interest rate was around 4% for the much of East Louisville, average interest rates in West Louisville were closer to 5%. A 30-year mortgage with an interest rate of 5% requires monthly payments that are 13% higher than a mortgage with an interest rate of 4%.</p>
 <pre class="r"><code>make_map(rate, title = &quot;Mortgage Interest Rate in 2019&quot;, 
          legend = &quot;Percent&quot;, 
          caption = &quot;Interest rate&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/mortgage_interest-1.png" width="672" /></p>
 </div>
 </div>
 <div id="housing-price-changes" class="section level1 tabset tabset-fade tabset-pills">
@@ -3136,14 +3257,21 @@ ggplot(map_zip) +
   geom_sf(aes(fill = hpi_fill)) +
   scale_fill_manual(values = viridis::viridis(6), na.value = &quot;grey&quot;) +
   #scale_fill_viridis() +
-  theme_bw(base_size = 22) +
+  theme_bw(base_size = 22, base_family = &quot;Montserrat&quot;) +
   theme(panel.grid = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank(),
-        panel.border = element_blank()) +
-  labs(title = &quot;Change in housing prices since 2000&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+        panel.border = element_blank(),
+        legend.title = element_blank()) +
+  labs(title = &quot;Change in housing prices since 2000&quot;) +
+  theme(
+    panel.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the panel
+    plot.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the plot
+    legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
+    legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
+    legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA))</code></pre>
+<p><img src="index_files/figure-html/long_term_appreciation-1.png" width="672" /></p>
 </div>
 <div id="short-term-appreciation" class="section level2">
 <h2>Short-term appreciation</h2>
@@ -3152,35 +3280,42 @@ ggplot(map_zip) +
   geom_sf(aes(fill = hpi_2015_fill)) +
   scale_fill_manual(values = viridis::viridis(6), na.value = &quot;grey&quot;) +
   #scale_fill_viridis() +
-  theme_bw(base_size = 22) +
+  theme_bw(base_size = 22, base_family = &quot;Montserrat&quot;) +
   theme(panel.grid = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank(),
-        panel.border = element_blank()) +
-  labs(title = &quot;Change in housing prices since 2015&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+        panel.border = element_blank(),
+        legend.title = element_blank()) +
+  labs(title = &quot;Change in housing prices since 2015&quot;) +
+  theme(
+    panel.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the panel
+    plot.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the plot
+    legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
+    legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
+    legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA))</code></pre>
+<p><img src="index_files/figure-html/short_term_appreciation-1.png" width="672" /></p>
 </div>
 </div>
 <div id="housing-availability" class="section level1">
 <h1>Housing Availability</h1>
-<p><strong>We’re currently updating the data to 2019, so the image used is from the Housing Needs Assessment.</strong></p>
-<p>In addition to measuring residents currently in housing they can afford, we can look at how the current housing stock meets residents’ needs. Based on analysis from the Housing Needs Assessment, we see that there is a lack of supply for very low-income households. While there are 57,895 households in Louisville whose income is below 30% of AMI (the area median income), there are only 26,483 units available to them. The other 31,412 households much live in housing that is more expensive than they can afford. A similar pattern exists for households that earn between 30% and 50% of the AMI, and there is smaller, but still substaintial, lack of available and affordable housing for families that make up to 100% of AMI.</p>
-<div class="figure">
-<img src="housing_availability.PNG" alt="" />
-<p class="caption">image</p>
-</div>
+<p>Housing must be both affordable and available for families to have housing that meets their needs. Based on framework from the Housing Needs Assessment, we compare households’ incomes to the price of housing available to them.</p>
+<p>We use the Area Median Income (AMI) to group households and housing units. In 2019, the AMI for Louisville was $76,400 for a family of four. (The AMI adjusts for household size.) We also use AMI to group homes and apartments by determining whether the housing would be affordable to households in that income group. Housing is affordable is a household spends less than 30% of their income on housing costs. For a fuller explanation of AMI, see the next section.</p>
+<p>We find that households making less than 30% of AMI do not have enough housing units available to them. While 39,000 households have incomes below 30% of AMI, there are only enough affordable and available units for about half of them of them.</p>
+<p>This creates an affordability gap for households making between 30% and 50% of AMI. While there are actually more housing units than households at this income level, many of them are occupied by households with lower incomes, making them unavailable. The same problem exists for households in the 80% AMI income group.</p>
+<p>At higher income levels, we find that households generally have access to affordable housing.</p>
+<p>Creating housing opportunities for households below 30% of AMI would help ease the housing gap not only for them, but for households in higher income groups as well.</p>
 <pre class="r"><code>library(magrittr)
 library(glptools)
 
 acs_micro_houses_ddi &lt;- ipumsr::read_ipums_ddi(&quot;usa_00083.xml&quot;)
-acs_houses_unoccupied &lt;- ipumsr::read_ipums_micro(acs_micro_houses_ddi)
+acs_houses_unoccupied &lt;- ipumsr::read_ipums_micro(acs_micro_houses_ddi, verbose=F)
 
 acs_houses_unoccupied %&lt;&gt;% glptools::process_acs()
 
 acs_houses_unoccupied %&lt;&gt;% 
   filter(FIPS == &quot;21111&quot;,
-         year %in% 2012:2016)
+         year %in% 2015:2019)
 
 acs_micro &lt;- feather::read_feather(&quot;../../glpdata/data-raw/microdata/acs_micro.feather&quot;)
 
@@ -3227,7 +3362,8 @@ ami_table_19 &lt;- data.frame(
 acs_micro %&lt;&gt;%
   filter(
     FIPS == &quot;21111&quot;,
-    year %in% 2012:2016) %&gt;%
+    year %in% 2015:2019,
+    OWNERSHP != 0) %&gt;%
   group_by(year, SERIAL) %&gt;%
   mutate(hh_size = n()) %&gt;%
   ungroup() %&gt;%
@@ -3237,7 +3373,7 @@ acs_micro %&lt;&gt;%
 utility_adjust &lt;- acs_micro %&gt;%
   filter(
     #vacant |
-    RENTGRS != RENT) %&gt;%
+    RENTGRS &gt; RENT) %&gt;%
   mutate(utility_est = (RENTGRS - RENT) / RENT) %&gt;%
   summarise(utiity_est = Hmisc::wtd.quantile(utility_est, HHWT, probs = 0.5, na.rm = T)) %&gt;%
   pull(utiity_est) %&gt;%
@@ -3253,7 +3389,7 @@ acs_micro %&lt;&gt;%
     OWNERSHP = replace(OWNERSHP, OWNERSHP == 0, NA),
     RENTGRS  = case_when(
       RENTGRS == 0 &amp; OWNERSHP == 1 ~ NA_real_,
-      RENTGRS == RENT ~ RENT * utility_adjust,
+      RENTGRS == RENT ~ RENT * (1 + utility_adjust),
       TRUE ~ RENTGRS),
     
     BEDROOMS = case_when(
@@ -3273,8 +3409,8 @@ acs_micro %&lt;&gt;%
       homeownership == 0 &amp; cost_burden == 1 ~ &quot;cb_renter&quot;,
       TRUE ~ NA_character_))  %&gt;%
   # Adjust HHICOME for inflation
-  COLA(HHINCOME, base_year = 2016, rpp = F) %&gt;%
-  left_join(ami_table_16, by = &quot;hh_size&quot;) %&gt;%
+  COLA(HHINCOME, base_year = 2019, rpp = F) %&gt;%
+  left_join(ami_table_19, by = &quot;hh_size&quot;) %&gt;%
   mutate(
     hh_ami_group = case_when(
       HHINCOME &lt; ami30  ~ 30,
@@ -3297,9 +3433,12 @@ acs_houses_unoccupied %&lt;&gt;%
   transmute(
     FIPS, year, HHWT,
     homeownership = if_else(VACANCY == 2, 1, 0),
-    RENTGRS = RENT * utility_adjust,
+    RENTGRS = RENT * (1 + utility_adjust),
+    RENT,
     VALUEH,
-    BEDROOMS,
+    BEDROOMS = case_when(
+      BEDROOMS == 0 ~ NA_real_,
+      BEDROOMS &gt;= 1 ~ BEDROOMS -1),
     VACANCY)
 
 # Bind data to occupied houses
@@ -3307,14 +3446,14 @@ acs_houses &lt;- acs_micro %&gt;%
   bind_rows(acs_houses_unoccupied) %&gt;%
   
   # Adjust for inflation
-  COLA(RENTGRS, VALUEH, base_year = 2016, rpp = F) %&gt;%
+  COLA(RENTGRS, VALUEH, base_year = 2019, rpp = F) %&gt;%
   mutate(
     
     # Reverse cost-burden calc to test AMI category of home
     # Per HNA, mortgage of $279,307 corresponds to a rent ceiling of $1,787
     est_cost = case_when(
       homeownership == 0 ~ RENTGRS * 12,
-      homeownership == 1 ~ VALUEH / (279307 / 1787)) * 12,
+      homeownership == 1 ~ VALUEH / 279307 * 1787 * 12),
     
     min_income = est_cost / 0.3,
     
@@ -3323,69 +3462,903 @@ acs_houses &lt;- acs_micro %&gt;%
     ami_pct = br_p1.5p / 71500 * 100,
     
     adj_income = HHINCOME * mult[hh_size]) %&gt;%
-  left_join(ami_table_16_house, by = c(&quot;BEDROOMS&quot; = &quot;bedrooms&quot;)) %&gt;%
   mutate(
+    # house_ami_group = case_when(
+    #   br_p1.5p &lt; (71500 * 0.3)  ~ 30,
+    #   br_p1.5p &lt; (71500 * 0.5)  ~ 50,
+    #   br_p1.5p &lt; (71500 * 0.8)  ~ 80,
+    #   br_p1.5p &lt; (71500 * 1) ~ 100,
+    #   br_p1.5p &lt; (71500 * 1.5) ~ 150,
+    #   br_p1.5p &lt; (71500 * 2) ~ 200,
+    #   TRUE ~ Inf)) %&gt;%
     house_ami_group = case_when(
-      br_p1.5p &lt; (71500 * 0.3)  ~ 30,
-      br_p1.5p &lt; (71500 * 0.5)  ~ 50,
-      br_p1.5p &lt; (71500 * 0.8)  ~ 80,
-      br_p1.5p &lt; (71500 * 1) ~ 100,
-      br_p1.5p &lt; (71500 * 1.5) ~ 150,
-      br_p1.5p &lt; (71500 * 2) ~ 200,
+      br_p1.5p &lt; (76400 * 0.3)  ~ 30,
+      br_p1.5p &lt; (76400 * 0.5)  ~ 50,
+      br_p1.5p &lt; (76400 * 0.8)  ~ 80,
+      br_p1.5p &lt; (76400 * 1) ~ 100,
+      br_p1.5p &lt; (76400 * 1.5) ~ 150,
+      br_p1.5p &lt; (76400 * 2) ~ 200,
       TRUE ~ Inf)) %&gt;%
   mutate(
-    afford_and_avail = if_else(VACANCY %in% 1:2 | 
-                               house_ami_group &lt;= hh_ami_group, 1, 0))
+    hh_ami_group = replace_na(hh_ami_group, 0),
+    available = if_else(VACANCY %in% 1:2 | adj_income &gt;= br_p1.5p, 1, 0)) %&gt;%
+    #available = if_else(VACANCY %in% 1:2 | hh_ami_group &lt;= house_ami_group, 1, 0)) %&gt;%
+  select(year, HHWT, RENT, RENTGRS, VALUEH, VACANCY, OWNERSHP, BEDROOMS, hh_size, homeownership, 
+         hh_ami_group, est_cost, min_income, br_pp, br_p1.5p, ami_pct, house_ami_group, available)
 
-table(acs_houses$VACANCY, useNA = &quot;ifany&quot;)</code></pre>
-<pre class="r"><code>results &lt;- acs_micro %&gt;%
-  group_by(hh_ami_group) %&gt;%
-  summarise(freq = sum(HHWT) / 5) %&gt;%
-  ungroup() %&gt;%
-  mutate(comparison = cumsum(freq))
+results_people &lt;- acs_micro %&gt;%
+  group_by(homeownership, hh_ami_group) %&gt;%
+  summarise(households = sum(HHWT) / 5, .groups = &quot;drop&quot;) %&gt;%
+  rename(ami_group = hh_ami_group)
 
-results &lt;- filter(acs_houses, afford_and_avail == 1) %&gt;%
-  group_by(house_ami_group) %&gt;%
-  summarise(freq = sum(HHWT) / 5) %&gt;%
-  ungroup() %&gt;%
-  mutate(comparison = cumsum(freq))
+sum_avail &lt;- function(df, value) {
+  filter(df, hh_ami_group &lt;= value, house_ami_group &lt;= value) %&gt;%
+    group_by(homeownership) %&gt;%
+    summarise(
+      ami_group = value,
+      houses = sum(HHWT) / 5, .groups=&quot;drop&quot;)
+}
 
+results_30 &lt;- sum_avail(acs_houses, 30)
+results_50 &lt;- sum_avail(acs_houses, 50)
+results_80 &lt;- sum_avail(acs_houses, 80)
+results_100 &lt;- sum_avail(acs_houses, 100)
+results_150 &lt;- sum_avail(acs_houses, 150)
+results_200 &lt;- sum_avail(acs_houses, 200)
+results_Inf &lt;- sum_avail(acs_houses, Inf)
 
-acs_houses %&gt;% filter(house_ami_group == 30) %&gt;% pull(HHWT) %&gt;% sum() / 5
+results_houses &lt;- bind_rows(results_30, results_50, results_80, results_100, results_150, results_200, results_Inf)
 
-table(acs_houses$house_ami_group, acs_houses$hh_ami_group)
+# actual &lt;- data.frame(
+#   homeownership = c(rep(0:1, each = 7)),
+#   level = rep(c(30, 50, 80, 100, 150, 200, Inf), 2),
+#   report_num = c(17563, 46023, 89538, 98513, 115443, 121556, NA_real_, 8404, 19788, 54031, 75898, 120394, 148999, NA_real_))
 
+# results_houses %&lt;&gt;%
+#   left_join(actual) %&gt;%
+#   mutate(dif = (freq - report_num) / report_num * 100)
 
+results &lt;- full_join(results_people, results_houses)
+
+library(ggtext)
+
+results %&lt;&gt;%
   group_by(ami_group) %&gt;%
+  summarise(across(households:houses, sum), .groups = &quot;drop&quot;)
+
+group_avail &lt;- function(df, value) {
+  df %&gt;%
+    filter(ami_group &lt;= value) %&gt;%
+    mutate(ami = value)
+}
+
+results$houses[2:7] = results$houses[2:7] - results$houses[1:6]
+
+results %&lt;&gt;%
   mutate(
-    total = sum(freq),
-    pct   = freq / total * 100) %&gt;%
-  ungroup() %&gt;%
-  select(ami_group, hh_type, pct) %&gt;%
-  pivot_wider(names_from = hh_type, values_from = pct) %&gt;%
+    households_cumsum = cumsum(households),
+    homes_cumsum = cumsum(houses),
+    lab_color = viridis(7, direction = -1)[2:7][match(ami_group, c(30, 50, 80, 100, 150, 200))],
+    label = paste0(&quot;&lt;span style=&#39;font-size:36pt&#39;&gt;&quot;, 
+                   scales::percent(homes_cumsum / households_cumsum, accuracy = 1), &quot;&lt;/span&gt;&quot;,
+                   &quot;&lt;span style=&#39;font-size:12pt&#39;&gt;&lt;br&gt;of households&lt;br&gt;up to&lt;br&gt;&lt;/span&gt;&quot;,
+                   &quot;&lt;span style=&#39;font-size:20pt; face:bold; color:&quot;, lab_color, &quot;&#39;&gt;&quot;, 
+                   ami_group, &quot;% AMI&quot;, &quot;&lt;/span&gt;&quot;))
+
+results_30 &lt;- group_avail(results, 30)
+results_50 &lt;- group_avail(results, 50)
+results_80 &lt;- group_avail(results, 80)
+results_100 &lt;- group_avail(results, 100)
+results_150 &lt;- group_avail(results, 150)
+results_200 &lt;- group_avail(results, 200)
+
+results_graph &lt;- bind_rows(results_30, results_50, results_80, results_100, results_150, results_200)
+
+results_graph %&lt;&gt;%
+  pivot_longer(households:houses, names_to = &quot;obs_type&quot;, values_to = &quot;value&quot;) %&gt;%
   mutate(
-    homeownership = cb_homeowner + noncb_homeowner,
-    cost_burdened = cb_homeowner + cb_renter)
+    ami_group = factor(ami_group, 
+                       levels = c(200, 150, 100, 80, 50, 30),
+                       labels = c(200, 150, 100, 80, 50, 30),
+                       ordered = T),
+    ami = factor(ami, labels = unique(label))) %&gt;% 
+  arrange(ami_group)
+
+
+ggplot(results_graph, aes(x = obs_type, y = value, fill = ami_group)) + 
+  geom_col(position = &#39;stack&#39;) + 
+  scale_fill_manual(values = viridis(7, direction = -1)[2:7],
+                    breaks = rev(c(200, 150, 100, 80, 50, 30)),  
+                    guide = guide_legend(reverse = TRUE),
+                    name = &quot;AMI Group&quot;) +
+  facet_grid(~ ami) + 
+  theme_bw(base_family = &quot;Montserrat&quot;, base_size = 22) +
+  theme(
+    panel.grid = element_blank(),
+    panel.spacing.y = element_blank(),
+    axis.text.y = element_blank(),
+    axis.text.x = element_markdown(margin=margin(-20)),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(),
+    panel.border = element_blank(),
+    strip.background = element_blank(),
+    plot.subtitle = element_text(hjust = 0, lineheight = 0.5),
+    legend.title = element_text(size = 24),
+    strip.text.x = element_markdown(lineheight = 0.6),
+    strip.placement = &quot;outside&quot;,
+    plot.title = element_text(size = 32),
+    plot.caption = element_text(size = 16, lineheight = 0.5, hjust = 0)) + 
+  scale_y_continuous(expand = c(.15, 0)) +
+  geom_text(
+    aes(label = scales::number(stat(y), scale = .001, accuracy = 1, suffix = &quot;K&quot;), group = ami), 
+    stat = &#39;summary&#39;, fun = sum, vjust = -1, size = 6, family = &quot;Montserrat&quot;) +
+  labs(title = &quot;Affordability Gaps&quot;,
+       subtitle = &quot;There are enough available and affordable homes for...&quot;,
+       caption = &quot;Within each group, the bar on the left represents the number of households at that income level\nand the bar on the right represents the number of homes that are available and affordable to them.&quot;) +
+  scale_x_discrete(
+    name = NULL,
+    labels = c(households = &quot;&lt;img src=&#39;001-family.png&#39; width=&#39;16&#39;/&gt;&quot;,
+           houses = &quot;&lt;img src=&#39;002-house-black-silhouette-without-door.png&#39; width=&#39;16&#39;/&gt;&quot;)) +
+  theme(
+    panel.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the panel
+    plot.background = element_rect(fill = &quot;transparent&quot;, color = NA), # bg of the plot
+    legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
+    legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
+    legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA))</code></pre>
+<p><img src="index_files/figure-html/housing_availability-1.png" width="672" /></p>
+<p>The table below shows the cutoffs for family income, monthly rent, and home purchase prices for each AMI group.</p>
+<p>We group residents by percentages of the Area Median Income (AMI) as determined by the Department of Housing and Urban Development. In 2019, the AMI for a four-person household in Louisville was $76,300. Median income means 50% of four-person families earned less than the AMI, and 50% earned more. The AMI is adjusted down for smaller households and up for larger households. For example, the AMI for a person living alone is $54,000, and the AMI for a six-person household is $89,000.</p>
+<p>Households in the 30% AMI income group have income less than or equal to the Federal Poverty Level (about 30% of $76,300). Households in the 50% AMI group have income between the Federal Poverty Level and 50% of the AMI. Households in the 80% AMI income group have income between 50% of the AMI and 80% of the AMI, and so on for higher AMI levels.</p>
+<p>We group homes and apartments by AMI by determining the minimum income needed for a household to live there affordably (without spending more than 30% of their income on housing costs). We adjust housing costs by bedroom size to align with how the AMI for households is adjusted by household size.</p>
+<p>We determine the AMI group of apartments using monthly rent and utilities. We determine the AMI group of homes based on the value of the home in order to measure the affordability of homeownership for new buyers, rather than cost-burden for existing homeowners. Based on the conversion used in the Housing Needs Assessment, we calculate that the annual cost of homeownership is about 1/13th of the home’s value.</p>
+<p>More details on the methodology can be found in the Housing Needs Assessment and the Housing Needs Assessment Methodology: <a href="https://loutrustfund.org/wp-content/uploads/2019/02/HNA_Appendix_190130.pdf" class="uri">https://loutrustfund.org/wp-content/uploads/2019/02/HNA_Appendix_190130.pdf</a> <a href="https://secureservercdn.net/166.62.110.60/7nm.5c8.myftpupload.com/wp-content/uploads/2019/02/HNA_FINAL_190222.pdf" class="uri">https://secureservercdn.net/166.62.110.60/7nm.5c8.myftpupload.com/wp-content/uploads/2019/02/HNA_FINAL_190222.pdf</a></p>
+<pre class="r"><code>ami_table_19 &lt;- data.frame(
+  hh_size = rep(1:12),
+  ami30    = c(16050, 18350, 21330, 25750, 30170, 34590, 39010, 43430, 
+               plyr::round_any(43430 + (43430 / 1.32 * 0.08) * 1:4, 50, ceiling)),
+  ami50    = c(26750, 30600, 34400, 38200, 41300, 44350, 47400, 50450,
+               plyr::round_any(50450 + (50450 / 1.32 * 0.08) * 1:4, 50, ceiling)),
+  ami80    = c(42800, 48900, 55000, 61100, 66000, 70900, 75800, 80700, 
+               plyr::round_any(75550 + (75550 / 1.32 * 0.08) * 1:4, 50, ceiling)),
+  ami100   = plyr::round_any(76400 * mult, 50, ceiling),
+  ami150   = plyr::round_any(76400 * mult * 1.5, 50, ceiling),
+  ami200   = plyr::round_any(76400 * mult * 2, 50, ceiling))
+
+ami_table_19 %&lt;&gt;%
+  pivot_longer(ami30:ami200, names_to = &quot;ami&quot;, values_to = &quot;value&quot;) %&gt;%
+  mutate(
+    rent = value * 0.3 / 12,
+    mortgage = rent / 1787 * 279307) %&gt;% 
+  pivot_wider(names_from = ami, values_from = value:mortgage)
+
+library(gt)
+
+ami_19 &lt;- ami_table_19 %&gt;%
+  gt() %&gt;%
+  tab_header(title = &quot;Area Median Incomes, Rents, and Purchase Price Limits by Household Size&quot;) %&gt;%
+  fmt_currency(columns = vars(value_ami30, value_ami50, value_ami80, value_ami100,
+                            value_ami150, value_ami200,
+                            mortgage_ami30, mortgage_ami50, mortgage_ami80, mortgage_ami100,
+                            mortgage_ami150, mortgage_ami200),
+              decimals = 0,
+              suffixing =T) %&gt;%
+  fmt_currency(columns = vars(rent_ami30, rent_ami50, rent_ami80, rent_ami100,
+                              rent_ami150, rent_ami200),
+            decimals = 1,
+            suffixing =T) %&gt;%
+  cols_label(
+    hh_size = &quot;Household Size&quot;,
+    value_ami30 = &quot;Annual Income&quot;, 
+    value_ami50 = &quot;Annual Income&quot;, 
+    value_ami80 = &quot;Annual Income&quot;,
+    value_ami100 = &quot;Annual Income&quot;,
+    value_ami150 = &quot;Annual Income&quot;, 
+    value_ami200 = &quot;Annual Income&quot;,
+    rent_ami30 = &quot;Monthly Rent Ceiling&quot;, 
+    rent_ami50 = &quot;Monthly Rent Ceiling&quot;,
+    rent_ami80 = &quot;Monthly Rent Ceiling&quot;,
+    rent_ami100 = &quot;Monthly Rent Ceiling&quot;,
+    rent_ami150 = &quot;Monthly Rent Ceiling&quot;, 
+    rent_ami200 = &quot;Monthly Rent Ceiling&quot;,
+    mortgage_ami30 = &quot;Purchase Price Ceiling&quot;, 
+    mortgage_ami50 = &quot;Purchase Price Ceiling&quot;, 
+    mortgage_ami80 = &quot;Purchase Price Ceiling&quot;, 
+    mortgage_ami100 = &quot;Purchase Price Ceiling&quot;,
+    mortgage_ami150 = &quot;Purchase Price Ceiling&quot;,
+    mortgage_ami200 = &quot;Purchase Price Ceiling&quot;) %&gt;%
+  # cols_move(columns = vars(perc_cost_burdened_under_35k, perc_renters, perc_poverty_12mnth, perc_unemployed_laborforce, perc_overcrowding_renter_1.50_or_more, housing_instability_index),
+  #           after = vars(district)) %&gt;%
+  tab_spanner(
+    label = &quot;30% AMI&quot;,
+    columns = vars(value_ami30, rent_ami30, mortgage_ami30)
+  ) %&gt;%
+  tab_spanner(
+    label = &quot;50% AMI&quot;,
+    columns = vars(value_ami50, rent_ami50, mortgage_ami50)
+  ) %&gt;%
+  tab_spanner(
+    label = &quot;80% AMI&quot;,
+    columns = vars(value_ami80, rent_ami80, mortgage_ami80)
+  ) %&gt;%
+  tab_spanner(
+    label = &quot;100% AMI&quot;,
+    columns = vars(value_ami100, rent_ami100, mortgage_ami100)
+  ) %&gt;%
+  tab_spanner(
+    label = &quot;150% AMI&quot;,
+    columns = vars(value_ami150, rent_ami150, mortgage_ami150)
+  ) %&gt;%
+  tab_spanner(
+    label = &quot;200% AMI&quot;,
+    columns = vars(value_ami200, rent_ami200, mortgage_ami200)
+  ) %&gt;%
+  cols_align(align = &quot;center&quot;) %&gt;%
+    tab_source_note(
+    source_note = md(&quot;Greater Louisville Project&quot;)
+  ) %&gt;%
+  tab_source_note(
+    source_note = md(&quot;Analysis framework from the 2019 Housing Needs Assessment.&quot;)
+  ) %&gt;%
+  opt_row_striping(row_striping = TRUE) %&gt;%
+  opt_table_outline() %&gt;%
+  tab_options(
+    table.font.size = px(12),
+    table.width = pct(50)
+  ) 
+
+ami_19</code></pre>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#bwhxoiztmb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 50%;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D3D3D3;
+  border-right-style: solid;
+  border-right-width: 3px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#bwhxoiztmb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#bwhxoiztmb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#bwhxoiztmb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#bwhxoiztmb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#bwhxoiztmb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#bwhxoiztmb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#bwhxoiztmb .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#bwhxoiztmb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#bwhxoiztmb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#bwhxoiztmb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#bwhxoiztmb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#bwhxoiztmb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#bwhxoiztmb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bwhxoiztmb .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bwhxoiztmb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#bwhxoiztmb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#bwhxoiztmb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bwhxoiztmb .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#bwhxoiztmb .gt_left {
+  text-align: left;
+}
+
+#bwhxoiztmb .gt_center {
+  text-align: center;
+}
+
+#bwhxoiztmb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#bwhxoiztmb .gt_font_normal {
+  font-weight: normal;
+}
+
+#bwhxoiztmb .gt_font_bold {
+  font-weight: bold;
+}
+
+#bwhxoiztmb .gt_font_italic {
+  font-style: italic;
+}
+
+#bwhxoiztmb .gt_super {
+  font-size: 65%;
+}
+
+#bwhxoiztmb .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="bwhxoiztmb" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="19" class="gt_heading gt_title gt_font_normal" style>Area Median Incomes, Rents, and Purchase Price Limits by Household Size</th>
+    </tr>
+    <tr>
+      <th colspan="19" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style></th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1">Household Size</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
+        <span class="gt_column_spanner">30% AMI</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
+        <span class="gt_column_spanner">50% AMI</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
+        <span class="gt_column_spanner">80% AMI</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
+        <span class="gt_column_spanner">100% AMI</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
+        <span class="gt_column_spanner">150% AMI</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
+        <span class="gt_column_spanner">200% AMI</span>
+      </th>
+    </tr>
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_center">1</td>
+      <td class="gt_row gt_center">$16K</td>
+      <td class="gt_row gt_center">$401.2</td>
+      <td class="gt_row gt_center">$63K</td>
+      <td class="gt_row gt_center">$27K</td>
+      <td class="gt_row gt_center">$668.8</td>
+      <td class="gt_row gt_center">$105K</td>
+      <td class="gt_row gt_center">$43K</td>
+      <td class="gt_row gt_center">$1.1K</td>
+      <td class="gt_row gt_center">$167K</td>
+      <td class="gt_row gt_center">$54K</td>
+      <td class="gt_row gt_center">$1.3K</td>
+      <td class="gt_row gt_center">$209K</td>
+      <td class="gt_row gt_center">$80K</td>
+      <td class="gt_row gt_center">$2.0K</td>
+      <td class="gt_row gt_center">$314K</td>
+      <td class="gt_row gt_center">$107K</td>
+      <td class="gt_row gt_center">$2.7K</td>
+      <td class="gt_row gt_center">$418K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center gt_striped">2</td>
+      <td class="gt_row gt_center gt_striped">$18K</td>
+      <td class="gt_row gt_center gt_striped">$458.8</td>
+      <td class="gt_row gt_center gt_striped">$72K</td>
+      <td class="gt_row gt_center gt_striped">$31K</td>
+      <td class="gt_row gt_center gt_striped">$765.0</td>
+      <td class="gt_row gt_center gt_striped">$120K</td>
+      <td class="gt_row gt_center gt_striped">$49K</td>
+      <td class="gt_row gt_center gt_striped">$1.2K</td>
+      <td class="gt_row gt_center gt_striped">$191K</td>
+      <td class="gt_row gt_center gt_striped">$61K</td>
+      <td class="gt_row gt_center gt_striped">$1.5K</td>
+      <td class="gt_row gt_center gt_striped">$239K</td>
+      <td class="gt_row gt_center gt_striped">$92K</td>
+      <td class="gt_row gt_center gt_striped">$2.3K</td>
+      <td class="gt_row gt_center gt_striped">$358K</td>
+      <td class="gt_row gt_center gt_striped">$122K</td>
+      <td class="gt_row gt_center gt_striped">$3.1K</td>
+      <td class="gt_row gt_center gt_striped">$478K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">3</td>
+      <td class="gt_row gt_center">$21K</td>
+      <td class="gt_row gt_center">$533.2</td>
+      <td class="gt_row gt_center">$83K</td>
+      <td class="gt_row gt_center">$34K</td>
+      <td class="gt_row gt_center">$860.0</td>
+      <td class="gt_row gt_center">$134K</td>
+      <td class="gt_row gt_center">$55K</td>
+      <td class="gt_row gt_center">$1.4K</td>
+      <td class="gt_row gt_center">$215K</td>
+      <td class="gt_row gt_center">$69K</td>
+      <td class="gt_row gt_center">$1.7K</td>
+      <td class="gt_row gt_center">$269K</td>
+      <td class="gt_row gt_center">$103K</td>
+      <td class="gt_row gt_center">$2.6K</td>
+      <td class="gt_row gt_center">$403K</td>
+      <td class="gt_row gt_center">$138K</td>
+      <td class="gt_row gt_center">$3.4K</td>
+      <td class="gt_row gt_center">$537K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center gt_striped">4</td>
+      <td class="gt_row gt_center gt_striped">$26K</td>
+      <td class="gt_row gt_center gt_striped">$643.8</td>
+      <td class="gt_row gt_center gt_striped">$101K</td>
+      <td class="gt_row gt_center gt_striped">$38K</td>
+      <td class="gt_row gt_center gt_striped">$955.0</td>
+      <td class="gt_row gt_center gt_striped">$149K</td>
+      <td class="gt_row gt_center gt_striped">$61K</td>
+      <td class="gt_row gt_center gt_striped">$1.5K</td>
+      <td class="gt_row gt_center gt_striped">$239K</td>
+      <td class="gt_row gt_center gt_striped">$76K</td>
+      <td class="gt_row gt_center gt_striped">$1.9K</td>
+      <td class="gt_row gt_center gt_striped">$299K</td>
+      <td class="gt_row gt_center gt_striped">$115K</td>
+      <td class="gt_row gt_center gt_striped">$2.9K</td>
+      <td class="gt_row gt_center gt_striped">$448K</td>
+      <td class="gt_row gt_center gt_striped">$153K</td>
+      <td class="gt_row gt_center gt_striped">$3.8K</td>
+      <td class="gt_row gt_center gt_striped">$597K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">5</td>
+      <td class="gt_row gt_center">$30K</td>
+      <td class="gt_row gt_center">$754.2</td>
+      <td class="gt_row gt_center">$118K</td>
+      <td class="gt_row gt_center">$41K</td>
+      <td class="gt_row gt_center">$1.0K</td>
+      <td class="gt_row gt_center">$161K</td>
+      <td class="gt_row gt_center">$66K</td>
+      <td class="gt_row gt_center">$1.6K</td>
+      <td class="gt_row gt_center">$258K</td>
+      <td class="gt_row gt_center">$83K</td>
+      <td class="gt_row gt_center">$2.1K</td>
+      <td class="gt_row gt_center">$323K</td>
+      <td class="gt_row gt_center">$124K</td>
+      <td class="gt_row gt_center">$3.1K</td>
+      <td class="gt_row gt_center">$484K</td>
+      <td class="gt_row gt_center">$165K</td>
+      <td class="gt_row gt_center">$4.1K</td>
+      <td class="gt_row gt_center">$645K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center gt_striped">6</td>
+      <td class="gt_row gt_center gt_striped">$35K</td>
+      <td class="gt_row gt_center gt_striped">$864.8</td>
+      <td class="gt_row gt_center gt_striped">$135K</td>
+      <td class="gt_row gt_center gt_striped">$44K</td>
+      <td class="gt_row gt_center gt_striped">$1.1K</td>
+      <td class="gt_row gt_center gt_striped">$173K</td>
+      <td class="gt_row gt_center gt_striped">$71K</td>
+      <td class="gt_row gt_center gt_striped">$1.8K</td>
+      <td class="gt_row gt_center gt_striped">$277K</td>
+      <td class="gt_row gt_center gt_striped">$89K</td>
+      <td class="gt_row gt_center gt_striped">$2.2K</td>
+      <td class="gt_row gt_center gt_striped">$346K</td>
+      <td class="gt_row gt_center gt_striped">$133K</td>
+      <td class="gt_row gt_center gt_striped">$3.3K</td>
+      <td class="gt_row gt_center gt_striped">$520K</td>
+      <td class="gt_row gt_center gt_striped">$177K</td>
+      <td class="gt_row gt_center gt_striped">$4.4K</td>
+      <td class="gt_row gt_center gt_striped">$693K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">7</td>
+      <td class="gt_row gt_center">$39K</td>
+      <td class="gt_row gt_center">$975.2</td>
+      <td class="gt_row gt_center">$152K</td>
+      <td class="gt_row gt_center">$47K</td>
+      <td class="gt_row gt_center">$1.2K</td>
+      <td class="gt_row gt_center">$185K</td>
+      <td class="gt_row gt_center">$76K</td>
+      <td class="gt_row gt_center">$1.9K</td>
+      <td class="gt_row gt_center">$296K</td>
+      <td class="gt_row gt_center">$95K</td>
+      <td class="gt_row gt_center">$2.4K</td>
+      <td class="gt_row gt_center">$370K</td>
+      <td class="gt_row gt_center">$142K</td>
+      <td class="gt_row gt_center">$3.6K</td>
+      <td class="gt_row gt_center">$555K</td>
+      <td class="gt_row gt_center">$190K</td>
+      <td class="gt_row gt_center">$4.7K</td>
+      <td class="gt_row gt_center">$740K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center gt_striped">8</td>
+      <td class="gt_row gt_center gt_striped">$43K</td>
+      <td class="gt_row gt_center gt_striped">$1.1K</td>
+      <td class="gt_row gt_center gt_striped">$170K</td>
+      <td class="gt_row gt_center gt_striped">$50K</td>
+      <td class="gt_row gt_center gt_striped">$1.3K</td>
+      <td class="gt_row gt_center gt_striped">$197K</td>
+      <td class="gt_row gt_center gt_striped">$81K</td>
+      <td class="gt_row gt_center gt_striped">$2.0K</td>
+      <td class="gt_row gt_center gt_striped">$315K</td>
+      <td class="gt_row gt_center gt_striped">$101K</td>
+      <td class="gt_row gt_center gt_striped">$2.5K</td>
+      <td class="gt_row gt_center gt_striped">$394K</td>
+      <td class="gt_row gt_center gt_striped">$151K</td>
+      <td class="gt_row gt_center gt_striped">$3.8K</td>
+      <td class="gt_row gt_center gt_striped">$591K</td>
+      <td class="gt_row gt_center gt_striped">$202K</td>
+      <td class="gt_row gt_center gt_striped">$5.0K</td>
+      <td class="gt_row gt_center gt_striped">$788K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">9</td>
+      <td class="gt_row gt_center">$46K</td>
+      <td class="gt_row gt_center">$1.2K</td>
+      <td class="gt_row gt_center">$180K</td>
+      <td class="gt_row gt_center">$54K</td>
+      <td class="gt_row gt_center">$1.3K</td>
+      <td class="gt_row gt_center">$209K</td>
+      <td class="gt_row gt_center">$80K</td>
+      <td class="gt_row gt_center">$2.0K</td>
+      <td class="gt_row gt_center">$313K</td>
+      <td class="gt_row gt_center">$107K</td>
+      <td class="gt_row gt_center">$2.7K</td>
+      <td class="gt_row gt_center">$418K</td>
+      <td class="gt_row gt_center">$160K</td>
+      <td class="gt_row gt_center">$4.0K</td>
+      <td class="gt_row gt_center">$627K</td>
+      <td class="gt_row gt_center">$214K</td>
+      <td class="gt_row gt_center">$5.3K</td>
+      <td class="gt_row gt_center">$836K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center gt_striped">10</td>
+      <td class="gt_row gt_center gt_striped">$49K</td>
+      <td class="gt_row gt_center gt_striped">$1.2K</td>
+      <td class="gt_row gt_center gt_striped">$190K</td>
+      <td class="gt_row gt_center gt_striped">$57K</td>
+      <td class="gt_row gt_center gt_striped">$1.4K</td>
+      <td class="gt_row gt_center gt_striped">$221K</td>
+      <td class="gt_row gt_center gt_striped">$85K</td>
+      <td class="gt_row gt_center gt_striped">$2.1K</td>
+      <td class="gt_row gt_center gt_striped">$331K</td>
+      <td class="gt_row gt_center gt_striped">$113K</td>
+      <td class="gt_row gt_center gt_striped">$2.8K</td>
+      <td class="gt_row gt_center gt_striped">$442K</td>
+      <td class="gt_row gt_center gt_striped">$170K</td>
+      <td class="gt_row gt_center gt_striped">$4.2K</td>
+      <td class="gt_row gt_center gt_striped">$663K</td>
+      <td class="gt_row gt_center gt_striped">$226K</td>
+      <td class="gt_row gt_center gt_striped">$5.7K</td>
+      <td class="gt_row gt_center gt_striped">$884K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">11</td>
+      <td class="gt_row gt_center">$51K</td>
+      <td class="gt_row gt_center">$1.3K</td>
+      <td class="gt_row gt_center">$201K</td>
+      <td class="gt_row gt_center">$60K</td>
+      <td class="gt_row gt_center">$1.5K</td>
+      <td class="gt_row gt_center">$233K</td>
+      <td class="gt_row gt_center">$89K</td>
+      <td class="gt_row gt_center">$2.2K</td>
+      <td class="gt_row gt_center">$349K</td>
+      <td class="gt_row gt_center">$119K</td>
+      <td class="gt_row gt_center">$3.0K</td>
+      <td class="gt_row gt_center">$466K</td>
+      <td class="gt_row gt_center">$179K</td>
+      <td class="gt_row gt_center">$4.5K</td>
+      <td class="gt_row gt_center">$699K</td>
+      <td class="gt_row gt_center">$238K</td>
+      <td class="gt_row gt_center">$6.0K</td>
+      <td class="gt_row gt_center">$932K</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center gt_striped">12</td>
+      <td class="gt_row gt_center gt_striped">$54K</td>
+      <td class="gt_row gt_center gt_striped">$1.4K</td>
+      <td class="gt_row gt_center gt_striped">$211K</td>
+      <td class="gt_row gt_center gt_striped">$63K</td>
+      <td class="gt_row gt_center gt_striped">$1.6K</td>
+      <td class="gt_row gt_center gt_striped">$245K</td>
+      <td class="gt_row gt_center gt_striped">$94K</td>
+      <td class="gt_row gt_center gt_striped">$2.3K</td>
+      <td class="gt_row gt_center gt_striped">$367K</td>
+      <td class="gt_row gt_center gt_striped">$125K</td>
+      <td class="gt_row gt_center gt_striped">$3.1K</td>
+      <td class="gt_row gt_center gt_striped">$490K</td>
+      <td class="gt_row gt_center gt_striped">$188K</td>
+      <td class="gt_row gt_center gt_striped">$4.7K</td>
+      <td class="gt_row gt_center gt_striped">$734K</td>
+      <td class="gt_row gt_center gt_striped">$251K</td>
+      <td class="gt_row gt_center gt_striped">$6.3K</td>
+      <td class="gt_row gt_center gt_striped">$979K</td>
+    </tr>
+  </tbody>
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="19">Greater Louisville Project</td>
+    </tr>
+    <tr>
+      <td class="gt_sourcenote" colspan="19">Analysis framework from the 2019 Housing Needs Assessment.</td>
+    </tr>
+  </tfoot>
   
-
-
-
-results &lt;- acs_micro %&gt;%
-  filter(!is.na(hh_type)) %&gt;%
-  mutate(ami_group = as.numeric(ami_group)) %&gt;%
-  group_by(ami_group, hh_type) %&gt;%
-  summarise(freq = sum(HHWT) / 5) %&gt;%
-  ungroup() %&gt;%
-  group_by(ami_group) %&gt;%
-  mutate(
-    total = sum(freq),
-    pct   = freq / total * 100) %&gt;%
-  ungroup() %&gt;%
-  select(ami_group, hh_type, pct) %&gt;%
-  pivot_wider(names_from = hh_type, values_from = pct) %&gt;%
-  mutate(
-    homeownership = cb_homeowner + noncb_homeowner,
-    cost_burdened = cb_homeowner + cb_renter)</code></pre>
+</table></div>
 </div>
 
 
