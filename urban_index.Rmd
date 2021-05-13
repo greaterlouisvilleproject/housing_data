@@ -58,12 +58,25 @@ font_add("Montserrat", "Montserrat/Montserrat-Regular.ttf")
 font_add("Montserrat Bold", "Montserrat/Montserrat-SemiBold.ttf")
 ```
 
+```{r, eval=FALSE}
+library(glpdata)
+library(glptools)
+
+save(home_loan_county, home_loan_tract,
+     HPI_county, HPI_zip,
+     map_zip, 
+     clean_acs_micro,
+     file = "glptools_exports.RData")
+```
+
 ```{r}
 library(tidyverse)
 library(rgdal)
 library(sf)
 library(viridis)
 library(magrittr)
+
+load("glptools_exports.RData")
 
 df <- read_csv("housing_index_raw.csv")
 
@@ -1089,8 +1102,6 @@ metro_equity_tbl
 In 2019, about 3.8 mortgages were issued per 100 residents; however, the availability of mortgages varies greatly across the city. Two census tracts saw 0 mortgages issued in 2019, and most of West Louisville saw fewer than 1 mortgage issued per 100 residents. Meanwhile, many areas experienced a much larger availability of mortgages, especially where there is new construction around the edges of the county.
 
 ```{r mortgages_per_person}
-home_loan_tract <- glpdata::home_loan_tract
-
 home_loan_tract_race <- home_loan_tract %>%
   filter(year == 2019, sex == "total", race != "total") %>%
   select(tract, race, denial:rate_spread)
@@ -1182,7 +1193,7 @@ We can also examine mortgage data by race. Black residents in Louisville receive
 #   addTiles()
 
 
-mortgage_county <- glpdata::home_loan_county
+mortgage_county <- home_loan_county
 
 plt_by <- function(df, group_var, var, title_text = "Home Mortgages", 
                    y_axis = "Percent", y_min = NA, units = "number") {
@@ -1289,11 +1300,9 @@ As Louisville grows, increasing home prices reflect changes in inflation and inc
 This map shows the change in existing home prices across zip codes since 2000, controlling for new construction. Since 2000, existing homes in Louisville have increased in value by an average of 57% (an average of about 2.4% per year). However, not every area of the city has benefited equally from this growth. Home prices in zip code 40204, which contains the Upper Highlands and Germantown, have more than doubled since 2000. While many zip codes close to downtown also saw high growth, many parts of West Louisville saw slow growth, and homes in 40212 lost value.
 
 ```{r long_term_appreciation}
-lou_num <- glpdata::HPI_county %>% filter(FIPS == "21111")
+lou_num <- HPI_county %>% filter(FIPS == "21111")
 
-map_zip <- glptools::map_zip
-
-housing_price_index <- glpdata::HPI_zip
+housing_price_index <- HPI_zip
 
 housing_price_index %<>% 
   filter(year == 2019)
@@ -1389,20 +1398,19 @@ At higher income levels, we find that households generally have access to afford
 Creating housing opportunities for households below 30% of AMI would help ease the housing gap not only for them, but for households in higher income groups as well.
 
 
-```{r housing_availability, message=FALSE, warning=FALSE}
+```{r housing_availability, message=FALSE, warning=FALSE, eval=FALSE}
 library(magrittr)
-library(glptools)
 
 acs_micro_houses_ddi <- ipumsr::read_ipums_ddi("usa_00083.xml")
 acs_houses_unoccupied <- ipumsr::read_ipums_micro(acs_micro_houses_ddi, verbose=F)
 
-acs_houses_unoccupied %<>% glptools::process_acs()
+acs_houses_unoccupied %<>% clean_acs_micro()
 
 acs_houses_unoccupied %<>% 
   filter(FIPS == "21111",
          year %in% 2015:2019)
 
-acs_micro <- feather::read_feather("../../glpdata/data-raw/microdata/acs_micro.feather")
+acs_micro <- arrow::read_feather("../../glpdata/data-raw/microdata/acs_micro.feather")
 
 # Create table of AMI limits based on HUD information
 mult = c(0.7, 0.8, 0.9, 1 + seq(0, 0.64, by = 0.08))
@@ -1709,7 +1717,7 @@ https://loutrustfund.org/wp-content/uploads/2019/02/HNA_Appendix_190130.pdf
 https://secureservercdn.net/166.62.110.60/7nm.5c8.myftpupload.com/wp-content/uploads/2019/02/HNA_FINAL_190222.pdf
 
 
-```{r}
+```{r, eval=FALSE}
 ami_table_19 <- data.frame(
   hh_size = rep(1:12),
   ami30    = c(16050, 18350, 21330, 25750, 30170, 34590, 39010, 43430, 

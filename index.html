@@ -15,13 +15,22 @@
 
 <title>Housing Instability in Louisville</title>
 
-<script src="index_files/header-attrs-2.5/header-attrs.js"></script>
+<script src="index_files/header-attrs-2.7/header-attrs.js"></script>
 <script src="index_files/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="index_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="index_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="index_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="index_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="index_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="index_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="index_files/tocify-1.9.1/jquery.tocify.js"></script>
@@ -29,8 +38,6 @@
 <script src="index_files/navigation-1.1/codefolding.js"></script>
 <link href="index_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="index_files/highlightjs-9.12.0/highlight.js"></script>
-<link href="index_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="index_files/anchor-sections-1.0/anchor-sections.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -42,11 +49,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -59,32 +61,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -94,10 +71,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -114,6 +87,9 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
@@ -126,7 +102,6 @@ summary {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -255,22 +230,22 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
 
-<div class="fluid-row" id="header">
+<div id="header">
 
-<div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu" style="min-width: 50px;">
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
@@ -319,11 +294,21 @@ div.tocify {
 <li>Public Assistance: Percent receiving some form of public assistance like SNAP or TANF</li>
 <li>Foreign Born: Percent born outside the U.S.</li>
 </ul>
+<pre class="r"><code>library(glpdata)
+library(glptools)
+
+save(home_loan_county, home_loan_tract,
+     HPI_county, HPI_zip,
+     map_zip, 
+     clean_acs_micro,
+     file = &quot;glptools_exports.RData&quot;)</code></pre>
 <pre class="r"><code>library(tidyverse)
 library(rgdal)
 library(sf)
 library(viridis)
 library(magrittr)
+
+load(&quot;glptools_exports.RData&quot;)
 
 df &lt;- read_csv(&quot;housing_index_raw.csv&quot;)
 
@@ -1007,6 +992,7 @@ district_label_points %&lt;&gt;%
     x = unname(st_coordinates(.)[,1]),
     y = unname(st_coordinates(.)[,2]))
 
+write_csv(st_drop_geometry(metro_sf), &quot;metro_data.csv&quot;)
 
 metro_map &lt;- function(indicator, title = &quot;&quot;, legend = &quot;&quot;, caption = &quot;&quot;, no_legend = FALSE){
 
@@ -1212,7 +1198,7 @@ metro_house_tbl</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#hixmkngtbu .gt_table {
+#uofmwfoocp .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1237,7 +1223,7 @@ metro_house_tbl</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_heading {
+#uofmwfoocp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1249,7 +1235,7 @@ metro_house_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_title {
+#uofmwfoocp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1259,7 +1245,7 @@ metro_house_tbl</code></pre>
   border-bottom-width: 0;
 }
 
-#hixmkngtbu .gt_subtitle {
+#uofmwfoocp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1269,13 +1255,13 @@ metro_house_tbl</code></pre>
   border-top-width: 0;
 }
 
-#hixmkngtbu .gt_bottom_border {
+#uofmwfoocp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_col_headings {
+#uofmwfoocp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1290,7 +1276,7 @@ metro_house_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_col_heading {
+#uofmwfoocp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1310,7 +1296,7 @@ metro_house_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#hixmkngtbu .gt_column_spanner_outer {
+#uofmwfoocp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1322,15 +1308,15 @@ metro_house_tbl</code></pre>
   padding-right: 4px;
 }
 
-#hixmkngtbu .gt_column_spanner_outer:first-child {
+#uofmwfoocp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hixmkngtbu .gt_column_spanner_outer:last-child {
+#uofmwfoocp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hixmkngtbu .gt_column_spanner {
+#uofmwfoocp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1342,7 +1328,7 @@ metro_house_tbl</code></pre>
   width: 100%;
 }
 
-#hixmkngtbu .gt_group_heading {
+#uofmwfoocp .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1364,7 +1350,7 @@ metro_house_tbl</code></pre>
   vertical-align: middle;
 }
 
-#hixmkngtbu .gt_empty_group_heading {
+#uofmwfoocp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1379,15 +1365,15 @@ metro_house_tbl</code></pre>
   vertical-align: middle;
 }
 
-#hixmkngtbu .gt_from_md > :first-child {
+#uofmwfoocp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hixmkngtbu .gt_from_md > :last-child {
+#uofmwfoocp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hixmkngtbu .gt_row {
+#uofmwfoocp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1406,7 +1392,7 @@ metro_house_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#hixmkngtbu .gt_stub {
+#uofmwfoocp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1418,7 +1404,7 @@ metro_house_tbl</code></pre>
   padding-left: 12px;
 }
 
-#hixmkngtbu .gt_summary_row {
+#uofmwfoocp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1428,7 +1414,7 @@ metro_house_tbl</code></pre>
   padding-right: 5px;
 }
 
-#hixmkngtbu .gt_first_summary_row {
+#uofmwfoocp .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1438,7 +1424,7 @@ metro_house_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_grand_summary_row {
+#uofmwfoocp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1448,7 +1434,7 @@ metro_house_tbl</code></pre>
   padding-right: 5px;
 }
 
-#hixmkngtbu .gt_first_grand_summary_row {
+#uofmwfoocp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1458,11 +1444,11 @@ metro_house_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_striped {
+#uofmwfoocp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hixmkngtbu .gt_table_body {
+#uofmwfoocp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1471,7 +1457,7 @@ metro_house_tbl</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_footnotes {
+#uofmwfoocp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1485,13 +1471,13 @@ metro_house_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_footnote {
+#uofmwfoocp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#hixmkngtbu .gt_sourcenotes {
+#uofmwfoocp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1505,46 +1491,46 @@ metro_house_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#hixmkngtbu .gt_sourcenote {
+#uofmwfoocp .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#hixmkngtbu .gt_left {
+#uofmwfoocp .gt_left {
   text-align: left;
 }
 
-#hixmkngtbu .gt_center {
+#uofmwfoocp .gt_center {
   text-align: center;
 }
 
-#hixmkngtbu .gt_right {
+#uofmwfoocp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hixmkngtbu .gt_font_normal {
+#uofmwfoocp .gt_font_normal {
   font-weight: normal;
 }
 
-#hixmkngtbu .gt_font_bold {
+#uofmwfoocp .gt_font_bold {
   font-weight: bold;
 }
 
-#hixmkngtbu .gt_font_italic {
+#uofmwfoocp .gt_font_italic {
   font-style: italic;
 }
 
-#hixmkngtbu .gt_super {
+#uofmwfoocp .gt_super {
   font-size: 65%;
 }
 
-#hixmkngtbu .gt_footnote_marks {
+#uofmwfoocp .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="hixmkngtbu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="uofmwfoocp" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="7" class="gt_heading gt_title gt_font_normal" style>Table 1: Housing Indicators</th>
@@ -1868,7 +1854,7 @@ metro_covid_tbl</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#thyfdzybjn .gt_table {
+#kjptdsenfr .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1893,7 +1879,7 @@ metro_covid_tbl</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_heading {
+#kjptdsenfr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1905,7 +1891,7 @@ metro_covid_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_title {
+#kjptdsenfr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1915,7 +1901,7 @@ metro_covid_tbl</code></pre>
   border-bottom-width: 0;
 }
 
-#thyfdzybjn .gt_subtitle {
+#kjptdsenfr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1925,13 +1911,13 @@ metro_covid_tbl</code></pre>
   border-top-width: 0;
 }
 
-#thyfdzybjn .gt_bottom_border {
+#kjptdsenfr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_col_headings {
+#kjptdsenfr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1946,7 +1932,7 @@ metro_covid_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_col_heading {
+#kjptdsenfr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1966,7 +1952,7 @@ metro_covid_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#thyfdzybjn .gt_column_spanner_outer {
+#kjptdsenfr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1978,15 +1964,15 @@ metro_covid_tbl</code></pre>
   padding-right: 4px;
 }
 
-#thyfdzybjn .gt_column_spanner_outer:first-child {
+#kjptdsenfr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#thyfdzybjn .gt_column_spanner_outer:last-child {
+#kjptdsenfr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#thyfdzybjn .gt_column_spanner {
+#kjptdsenfr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1998,7 +1984,7 @@ metro_covid_tbl</code></pre>
   width: 100%;
 }
 
-#thyfdzybjn .gt_group_heading {
+#kjptdsenfr .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2020,7 +2006,7 @@ metro_covid_tbl</code></pre>
   vertical-align: middle;
 }
 
-#thyfdzybjn .gt_empty_group_heading {
+#kjptdsenfr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2035,15 +2021,15 @@ metro_covid_tbl</code></pre>
   vertical-align: middle;
 }
 
-#thyfdzybjn .gt_from_md > :first-child {
+#kjptdsenfr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#thyfdzybjn .gt_from_md > :last-child {
+#kjptdsenfr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#thyfdzybjn .gt_row {
+#kjptdsenfr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2062,7 +2048,7 @@ metro_covid_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#thyfdzybjn .gt_stub {
+#kjptdsenfr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2074,7 +2060,7 @@ metro_covid_tbl</code></pre>
   padding-left: 12px;
 }
 
-#thyfdzybjn .gt_summary_row {
+#kjptdsenfr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2084,7 +2070,7 @@ metro_covid_tbl</code></pre>
   padding-right: 5px;
 }
 
-#thyfdzybjn .gt_first_summary_row {
+#kjptdsenfr .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2094,7 +2080,7 @@ metro_covid_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_grand_summary_row {
+#kjptdsenfr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2104,7 +2090,7 @@ metro_covid_tbl</code></pre>
   padding-right: 5px;
 }
 
-#thyfdzybjn .gt_first_grand_summary_row {
+#kjptdsenfr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2114,11 +2100,11 @@ metro_covid_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_striped {
+#kjptdsenfr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#thyfdzybjn .gt_table_body {
+#kjptdsenfr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2127,7 +2113,7 @@ metro_covid_tbl</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_footnotes {
+#kjptdsenfr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2141,13 +2127,13 @@ metro_covid_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_footnote {
+#kjptdsenfr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#thyfdzybjn .gt_sourcenotes {
+#kjptdsenfr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2161,46 +2147,46 @@ metro_covid_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#thyfdzybjn .gt_sourcenote {
+#kjptdsenfr .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#thyfdzybjn .gt_left {
+#kjptdsenfr .gt_left {
   text-align: left;
 }
 
-#thyfdzybjn .gt_center {
+#kjptdsenfr .gt_center {
   text-align: center;
 }
 
-#thyfdzybjn .gt_right {
+#kjptdsenfr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#thyfdzybjn .gt_font_normal {
+#kjptdsenfr .gt_font_normal {
   font-weight: normal;
 }
 
-#thyfdzybjn .gt_font_bold {
+#kjptdsenfr .gt_font_bold {
   font-weight: bold;
 }
 
-#thyfdzybjn .gt_font_italic {
+#kjptdsenfr .gt_font_italic {
   font-style: italic;
 }
 
-#thyfdzybjn .gt_super {
+#kjptdsenfr .gt_super {
   font-size: 65%;
 }
 
-#thyfdzybjn .gt_footnote_marks {
+#kjptdsenfr .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="thyfdzybjn" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="kjptdsenfr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="4" class="gt_heading gt_title gt_font_normal" style>Table 2: Covid Indicators</th>
@@ -2445,7 +2431,7 @@ metro_equity_tbl</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#sxuobzrkdw .gt_table {
+#zsazselssx .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2470,7 +2456,7 @@ metro_equity_tbl</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_heading {
+#zsazselssx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2482,7 +2468,7 @@ metro_equity_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_title {
+#zsazselssx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2492,7 +2478,7 @@ metro_equity_tbl</code></pre>
   border-bottom-width: 0;
 }
 
-#sxuobzrkdw .gt_subtitle {
+#zsazselssx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2502,13 +2488,13 @@ metro_equity_tbl</code></pre>
   border-top-width: 0;
 }
 
-#sxuobzrkdw .gt_bottom_border {
+#zsazselssx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_col_headings {
+#zsazselssx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2523,7 +2509,7 @@ metro_equity_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_col_heading {
+#zsazselssx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2543,7 +2529,7 @@ metro_equity_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#sxuobzrkdw .gt_column_spanner_outer {
+#zsazselssx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2555,15 +2541,15 @@ metro_equity_tbl</code></pre>
   padding-right: 4px;
 }
 
-#sxuobzrkdw .gt_column_spanner_outer:first-child {
+#zsazselssx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#sxuobzrkdw .gt_column_spanner_outer:last-child {
+#zsazselssx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#sxuobzrkdw .gt_column_spanner {
+#zsazselssx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2575,7 +2561,7 @@ metro_equity_tbl</code></pre>
   width: 100%;
 }
 
-#sxuobzrkdw .gt_group_heading {
+#zsazselssx .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2597,7 +2583,7 @@ metro_equity_tbl</code></pre>
   vertical-align: middle;
 }
 
-#sxuobzrkdw .gt_empty_group_heading {
+#zsazselssx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2612,15 +2598,15 @@ metro_equity_tbl</code></pre>
   vertical-align: middle;
 }
 
-#sxuobzrkdw .gt_from_md > :first-child {
+#zsazselssx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#sxuobzrkdw .gt_from_md > :last-child {
+#zsazselssx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#sxuobzrkdw .gt_row {
+#zsazselssx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2639,7 +2625,7 @@ metro_equity_tbl</code></pre>
   overflow-x: hidden;
 }
 
-#sxuobzrkdw .gt_stub {
+#zsazselssx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2651,7 +2637,7 @@ metro_equity_tbl</code></pre>
   padding-left: 12px;
 }
 
-#sxuobzrkdw .gt_summary_row {
+#zsazselssx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2661,7 +2647,7 @@ metro_equity_tbl</code></pre>
   padding-right: 5px;
 }
 
-#sxuobzrkdw .gt_first_summary_row {
+#zsazselssx .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2671,7 +2657,7 @@ metro_equity_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_grand_summary_row {
+#zsazselssx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2681,7 +2667,7 @@ metro_equity_tbl</code></pre>
   padding-right: 5px;
 }
 
-#sxuobzrkdw .gt_first_grand_summary_row {
+#zsazselssx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2691,11 +2677,11 @@ metro_equity_tbl</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_striped {
+#zsazselssx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#sxuobzrkdw .gt_table_body {
+#zsazselssx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2704,7 +2690,7 @@ metro_equity_tbl</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_footnotes {
+#zsazselssx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2718,13 +2704,13 @@ metro_equity_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_footnote {
+#zsazselssx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#sxuobzrkdw .gt_sourcenotes {
+#zsazselssx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2738,46 +2724,46 @@ metro_equity_tbl</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#sxuobzrkdw .gt_sourcenote {
+#zsazselssx .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#sxuobzrkdw .gt_left {
+#zsazselssx .gt_left {
   text-align: left;
 }
 
-#sxuobzrkdw .gt_center {
+#zsazselssx .gt_center {
   text-align: center;
 }
 
-#sxuobzrkdw .gt_right {
+#zsazselssx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#sxuobzrkdw .gt_font_normal {
+#zsazselssx .gt_font_normal {
   font-weight: normal;
 }
 
-#sxuobzrkdw .gt_font_bold {
+#zsazselssx .gt_font_bold {
   font-weight: bold;
 }
 
-#sxuobzrkdw .gt_font_italic {
+#zsazselssx .gt_font_italic {
   font-style: italic;
 }
 
-#sxuobzrkdw .gt_super {
+#zsazselssx .gt_super {
   font-size: 65%;
 }
 
-#sxuobzrkdw .gt_footnote_marks {
+#zsazselssx .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="sxuobzrkdw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+<div id="zsazselssx" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
   <thead class="gt_header">
     <tr>
       <th colspan="6" class="gt_heading gt_title gt_font_normal" style>Table 3: Equity Indicators</th>
@@ -3028,9 +3014,7 @@ metro_equity_tbl</code></pre>
 <div id="mortgages-by-geography" class="section level2">
 <h2>Mortgages by geography</h2>
 <p>In 2019, about 3.8 mortgages were issued per 100 residents; however, the availability of mortgages varies greatly across the city. Two census tracts saw 0 mortgages issued in 2019, and most of West Louisville saw fewer than 1 mortgage issued per 100 residents. Meanwhile, many areas experienced a much larger availability of mortgages, especially where there is new construction around the edges of the county.</p>
-<pre class="r"><code>home_loan_tract &lt;- glpdata::home_loan_tract
-
-home_loan_tract_race &lt;- home_loan_tract %&gt;%
+<pre class="r"><code>home_loan_tract_race &lt;- home_loan_tract %&gt;%
   filter(year == 2019, sex == &quot;total&quot;, race != &quot;total&quot;) %&gt;%
   select(tract, race, denial:rate_spread)
 
@@ -3118,7 +3102,7 @@ ggplot(jfco_sf) +
 #   addTiles()
 
 
-mortgage_county &lt;- glpdata::home_loan_county
+mortgage_county &lt;- home_loan_county
 
 plt_by &lt;- function(df, group_var, var, title_text = &quot;Home Mortgages&quot;, 
                    y_axis = &quot;Percent&quot;, y_min = NA, units = &quot;number&quot;) {
@@ -3214,11 +3198,9 @@ plt_by(mortgage_county, Race, loan_number_per_100, &quot;Mortgages by race&quot;
 <div id="long-term-appreciation" class="section level2">
 <h2>Long-term appreciation</h2>
 <p>This map shows the change in existing home prices across zip codes since 2000, controlling for new construction. Since 2000, existing homes in Louisville have increased in value by an average of 57% (an average of about 2.4% per year). However, not every area of the city has benefited equally from this growth. Home prices in zip code 40204, which contains the Upper Highlands and Germantown, have more than doubled since 2000. While many zip codes close to downtown also saw high growth, many parts of West Louisville saw slow growth, and homes in 40212 lost value.</p>
-<pre class="r"><code>lou_num &lt;- glpdata::HPI_county %&gt;% filter(FIPS == &quot;21111&quot;)
+<pre class="r"><code>lou_num &lt;- HPI_county %&gt;% filter(FIPS == &quot;21111&quot;)
 
-map_zip &lt;- glptools::map_zip
-
-housing_price_index &lt;- glpdata::HPI_zip
+housing_price_index &lt;- HPI_zip
 
 housing_price_index %&lt;&gt;% 
   filter(year == 2019)
@@ -3306,18 +3288,17 @@ ggplot(map_zip) +
 <p>At higher income levels, we find that households generally have access to affordable housing.</p>
 <p>Creating housing opportunities for households below 30% of AMI would help ease the housing gap not only for them, but for households in higher income groups as well.</p>
 <pre class="r"><code>library(magrittr)
-library(glptools)
 
 acs_micro_houses_ddi &lt;- ipumsr::read_ipums_ddi(&quot;usa_00083.xml&quot;)
 acs_houses_unoccupied &lt;- ipumsr::read_ipums_micro(acs_micro_houses_ddi, verbose=F)
 
-acs_houses_unoccupied %&lt;&gt;% glptools::process_acs()
+acs_houses_unoccupied %&lt;&gt;% clean_acs_micro()
 
 acs_houses_unoccupied %&lt;&gt;% 
   filter(FIPS == &quot;21111&quot;,
          year %in% 2015:2019)
 
-acs_micro &lt;- feather::read_feather(&quot;../../glpdata/data-raw/microdata/acs_micro.feather&quot;)
+acs_micro &lt;- arrow::read_feather(&quot;../../glpdata/data-raw/microdata/acs_micro.feather&quot;)
 
 # Create table of AMI limits based on HUD information
 mult = c(0.7, 0.8, 0.9, 1 + seq(0, 0.64, by = 0.08))
@@ -3605,7 +3586,6 @@ ggplot(results_graph, aes(x = obs_type, y = value, fill = ami_group)) +
     legend.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend bg
     legend.box.background = element_rect(fill = &quot;transparent&quot;, color = &quot;transparent&quot;), # get rid of legend panel bg
     legend.key = element_rect(fill = &quot;transparent&quot;,colour = NA))</code></pre>
-<p><img src="index_files/figure-html/housing_availability-1.png" width="672" /></p>
 <p>The table below shows the cutoffs for family income, monthly rent, and home purchase prices for each AMI group.</p>
 <p>We group residents by percentages of the Area Median Income (AMI) as determined by the Department of Housing and Urban Development. In 2019, the AMI for a four-person household in Louisville was $76,300. Median income means 50% of four-person families earned less than the AMI, and 50% earned more. The AMI is adjusted down for smaller households and up for larger households. For example, the AMI for a person living alone is $54,000, and the AMI for a six-person household is $89,000.</p>
 <p>Households in the 30% AMI income group have income less than or equal to the Federal Poverty Level (about 30% of $76,300). Households in the 50% AMI group have income between the Federal Poverty Level and 50% of the AMI. Households in the 80% AMI income group have income between 50% of the AMI and 80% of the AMI, and so on for higher AMI levels.</p>
@@ -3707,658 +3687,6 @@ ami_19 &lt;- ami_table_19 %&gt;%
   ) 
 
 ami_19</code></pre>
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#knntwbmzwr .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 12px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: 50%;
-  border-top-style: solid;
-  border-top-width: 3px;
-  border-top-color: #D3D3D3;
-  border-right-style: solid;
-  border-right-width: 3px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 3px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: solid;
-  border-left-width: 3px;
-  border-left-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#knntwbmzwr .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 4px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#knntwbmzwr .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#knntwbmzwr .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#knntwbmzwr .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#knntwbmzwr .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#knntwbmzwr .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#knntwbmzwr .gt_group_heading {
-  padding: 8px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#knntwbmzwr .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#knntwbmzwr .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#knntwbmzwr .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#knntwbmzwr .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#knntwbmzwr .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 12px;
-}
-
-#knntwbmzwr .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#knntwbmzwr .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#knntwbmzwr .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#knntwbmzwr .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding: 4px;
-}
-
-#knntwbmzwr .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#knntwbmzwr .gt_sourcenote {
-  font-size: 90%;
-  padding: 4px;
-}
-
-#knntwbmzwr .gt_left {
-  text-align: left;
-}
-
-#knntwbmzwr .gt_center {
-  text-align: center;
-}
-
-#knntwbmzwr .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#knntwbmzwr .gt_font_normal {
-  font-weight: normal;
-}
-
-#knntwbmzwr .gt_font_bold {
-  font-weight: bold;
-}
-
-#knntwbmzwr .gt_font_italic {
-  font-style: italic;
-}
-
-#knntwbmzwr .gt_super {
-  font-size: 65%;
-}
-
-#knntwbmzwr .gt_footnote_marks {
-  font-style: italic;
-  font-size: 65%;
-}
-</style>
-<div id="knntwbmzwr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
-  <thead class="gt_header">
-    <tr>
-      <th colspan="19" class="gt_heading gt_title gt_font_normal" style>Area Median Incomes, Rents, and Purchase Price Limits by Household Size</th>
-    </tr>
-    <tr>
-      <th colspan="19" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style></th>
-    </tr>
-  </thead>
-  <thead class="gt_col_headings">
-    <tr>
-      <th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1">Household Size</th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
-        <span class="gt_column_spanner">30% AMI</span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
-        <span class="gt_column_spanner">50% AMI</span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
-        <span class="gt_column_spanner">80% AMI</span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
-        <span class="gt_column_spanner">100% AMI</span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
-        <span class="gt_column_spanner">150% AMI</span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
-        <span class="gt_column_spanner">200% AMI</span>
-      </th>
-    </tr>
-    <tr>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Annual Income</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Monthly Rent Ceiling</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Purchase Price Ceiling</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr>
-      <td class="gt_row gt_center">1</td>
-      <td class="gt_row gt_center">$16K</td>
-      <td class="gt_row gt_center">$401.2</td>
-      <td class="gt_row gt_center">$63K</td>
-      <td class="gt_row gt_center">$27K</td>
-      <td class="gt_row gt_center">$668.8</td>
-      <td class="gt_row gt_center">$105K</td>
-      <td class="gt_row gt_center">$43K</td>
-      <td class="gt_row gt_center">$1.1K</td>
-      <td class="gt_row gt_center">$167K</td>
-      <td class="gt_row gt_center">$54K</td>
-      <td class="gt_row gt_center">$1.3K</td>
-      <td class="gt_row gt_center">$209K</td>
-      <td class="gt_row gt_center">$80K</td>
-      <td class="gt_row gt_center">$2.0K</td>
-      <td class="gt_row gt_center">$314K</td>
-      <td class="gt_row gt_center">$107K</td>
-      <td class="gt_row gt_center">$2.7K</td>
-      <td class="gt_row gt_center">$418K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center gt_striped">2</td>
-      <td class="gt_row gt_center gt_striped">$18K</td>
-      <td class="gt_row gt_center gt_striped">$458.8</td>
-      <td class="gt_row gt_center gt_striped">$72K</td>
-      <td class="gt_row gt_center gt_striped">$31K</td>
-      <td class="gt_row gt_center gt_striped">$765.0</td>
-      <td class="gt_row gt_center gt_striped">$120K</td>
-      <td class="gt_row gt_center gt_striped">$49K</td>
-      <td class="gt_row gt_center gt_striped">$1.2K</td>
-      <td class="gt_row gt_center gt_striped">$191K</td>
-      <td class="gt_row gt_center gt_striped">$61K</td>
-      <td class="gt_row gt_center gt_striped">$1.5K</td>
-      <td class="gt_row gt_center gt_striped">$239K</td>
-      <td class="gt_row gt_center gt_striped">$92K</td>
-      <td class="gt_row gt_center gt_striped">$2.3K</td>
-      <td class="gt_row gt_center gt_striped">$358K</td>
-      <td class="gt_row gt_center gt_striped">$122K</td>
-      <td class="gt_row gt_center gt_striped">$3.1K</td>
-      <td class="gt_row gt_center gt_striped">$478K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center">3</td>
-      <td class="gt_row gt_center">$21K</td>
-      <td class="gt_row gt_center">$533.2</td>
-      <td class="gt_row gt_center">$83K</td>
-      <td class="gt_row gt_center">$34K</td>
-      <td class="gt_row gt_center">$860.0</td>
-      <td class="gt_row gt_center">$134K</td>
-      <td class="gt_row gt_center">$55K</td>
-      <td class="gt_row gt_center">$1.4K</td>
-      <td class="gt_row gt_center">$215K</td>
-      <td class="gt_row gt_center">$69K</td>
-      <td class="gt_row gt_center">$1.7K</td>
-      <td class="gt_row gt_center">$269K</td>
-      <td class="gt_row gt_center">$103K</td>
-      <td class="gt_row gt_center">$2.6K</td>
-      <td class="gt_row gt_center">$403K</td>
-      <td class="gt_row gt_center">$138K</td>
-      <td class="gt_row gt_center">$3.4K</td>
-      <td class="gt_row gt_center">$537K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center gt_striped">4</td>
-      <td class="gt_row gt_center gt_striped">$26K</td>
-      <td class="gt_row gt_center gt_striped">$643.8</td>
-      <td class="gt_row gt_center gt_striped">$101K</td>
-      <td class="gt_row gt_center gt_striped">$38K</td>
-      <td class="gt_row gt_center gt_striped">$955.0</td>
-      <td class="gt_row gt_center gt_striped">$149K</td>
-      <td class="gt_row gt_center gt_striped">$61K</td>
-      <td class="gt_row gt_center gt_striped">$1.5K</td>
-      <td class="gt_row gt_center gt_striped">$239K</td>
-      <td class="gt_row gt_center gt_striped">$76K</td>
-      <td class="gt_row gt_center gt_striped">$1.9K</td>
-      <td class="gt_row gt_center gt_striped">$299K</td>
-      <td class="gt_row gt_center gt_striped">$115K</td>
-      <td class="gt_row gt_center gt_striped">$2.9K</td>
-      <td class="gt_row gt_center gt_striped">$448K</td>
-      <td class="gt_row gt_center gt_striped">$153K</td>
-      <td class="gt_row gt_center gt_striped">$3.8K</td>
-      <td class="gt_row gt_center gt_striped">$597K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center">5</td>
-      <td class="gt_row gt_center">$30K</td>
-      <td class="gt_row gt_center">$754.2</td>
-      <td class="gt_row gt_center">$118K</td>
-      <td class="gt_row gt_center">$41K</td>
-      <td class="gt_row gt_center">$1.0K</td>
-      <td class="gt_row gt_center">$161K</td>
-      <td class="gt_row gt_center">$66K</td>
-      <td class="gt_row gt_center">$1.6K</td>
-      <td class="gt_row gt_center">$258K</td>
-      <td class="gt_row gt_center">$83K</td>
-      <td class="gt_row gt_center">$2.1K</td>
-      <td class="gt_row gt_center">$323K</td>
-      <td class="gt_row gt_center">$124K</td>
-      <td class="gt_row gt_center">$3.1K</td>
-      <td class="gt_row gt_center">$484K</td>
-      <td class="gt_row gt_center">$165K</td>
-      <td class="gt_row gt_center">$4.1K</td>
-      <td class="gt_row gt_center">$645K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center gt_striped">6</td>
-      <td class="gt_row gt_center gt_striped">$35K</td>
-      <td class="gt_row gt_center gt_striped">$864.8</td>
-      <td class="gt_row gt_center gt_striped">$135K</td>
-      <td class="gt_row gt_center gt_striped">$44K</td>
-      <td class="gt_row gt_center gt_striped">$1.1K</td>
-      <td class="gt_row gt_center gt_striped">$173K</td>
-      <td class="gt_row gt_center gt_striped">$71K</td>
-      <td class="gt_row gt_center gt_striped">$1.8K</td>
-      <td class="gt_row gt_center gt_striped">$277K</td>
-      <td class="gt_row gt_center gt_striped">$89K</td>
-      <td class="gt_row gt_center gt_striped">$2.2K</td>
-      <td class="gt_row gt_center gt_striped">$346K</td>
-      <td class="gt_row gt_center gt_striped">$133K</td>
-      <td class="gt_row gt_center gt_striped">$3.3K</td>
-      <td class="gt_row gt_center gt_striped">$520K</td>
-      <td class="gt_row gt_center gt_striped">$177K</td>
-      <td class="gt_row gt_center gt_striped">$4.4K</td>
-      <td class="gt_row gt_center gt_striped">$693K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center">7</td>
-      <td class="gt_row gt_center">$39K</td>
-      <td class="gt_row gt_center">$975.2</td>
-      <td class="gt_row gt_center">$152K</td>
-      <td class="gt_row gt_center">$47K</td>
-      <td class="gt_row gt_center">$1.2K</td>
-      <td class="gt_row gt_center">$185K</td>
-      <td class="gt_row gt_center">$76K</td>
-      <td class="gt_row gt_center">$1.9K</td>
-      <td class="gt_row gt_center">$296K</td>
-      <td class="gt_row gt_center">$95K</td>
-      <td class="gt_row gt_center">$2.4K</td>
-      <td class="gt_row gt_center">$370K</td>
-      <td class="gt_row gt_center">$142K</td>
-      <td class="gt_row gt_center">$3.6K</td>
-      <td class="gt_row gt_center">$555K</td>
-      <td class="gt_row gt_center">$190K</td>
-      <td class="gt_row gt_center">$4.7K</td>
-      <td class="gt_row gt_center">$740K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center gt_striped">8</td>
-      <td class="gt_row gt_center gt_striped">$43K</td>
-      <td class="gt_row gt_center gt_striped">$1.1K</td>
-      <td class="gt_row gt_center gt_striped">$170K</td>
-      <td class="gt_row gt_center gt_striped">$50K</td>
-      <td class="gt_row gt_center gt_striped">$1.3K</td>
-      <td class="gt_row gt_center gt_striped">$197K</td>
-      <td class="gt_row gt_center gt_striped">$81K</td>
-      <td class="gt_row gt_center gt_striped">$2.0K</td>
-      <td class="gt_row gt_center gt_striped">$315K</td>
-      <td class="gt_row gt_center gt_striped">$101K</td>
-      <td class="gt_row gt_center gt_striped">$2.5K</td>
-      <td class="gt_row gt_center gt_striped">$394K</td>
-      <td class="gt_row gt_center gt_striped">$151K</td>
-      <td class="gt_row gt_center gt_striped">$3.8K</td>
-      <td class="gt_row gt_center gt_striped">$591K</td>
-      <td class="gt_row gt_center gt_striped">$202K</td>
-      <td class="gt_row gt_center gt_striped">$5.0K</td>
-      <td class="gt_row gt_center gt_striped">$788K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center">9</td>
-      <td class="gt_row gt_center">$46K</td>
-      <td class="gt_row gt_center">$1.2K</td>
-      <td class="gt_row gt_center">$180K</td>
-      <td class="gt_row gt_center">$54K</td>
-      <td class="gt_row gt_center">$1.3K</td>
-      <td class="gt_row gt_center">$209K</td>
-      <td class="gt_row gt_center">$80K</td>
-      <td class="gt_row gt_center">$2.0K</td>
-      <td class="gt_row gt_center">$313K</td>
-      <td class="gt_row gt_center">$107K</td>
-      <td class="gt_row gt_center">$2.7K</td>
-      <td class="gt_row gt_center">$418K</td>
-      <td class="gt_row gt_center">$160K</td>
-      <td class="gt_row gt_center">$4.0K</td>
-      <td class="gt_row gt_center">$627K</td>
-      <td class="gt_row gt_center">$214K</td>
-      <td class="gt_row gt_center">$5.3K</td>
-      <td class="gt_row gt_center">$836K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center gt_striped">10</td>
-      <td class="gt_row gt_center gt_striped">$49K</td>
-      <td class="gt_row gt_center gt_striped">$1.2K</td>
-      <td class="gt_row gt_center gt_striped">$190K</td>
-      <td class="gt_row gt_center gt_striped">$57K</td>
-      <td class="gt_row gt_center gt_striped">$1.4K</td>
-      <td class="gt_row gt_center gt_striped">$221K</td>
-      <td class="gt_row gt_center gt_striped">$85K</td>
-      <td class="gt_row gt_center gt_striped">$2.1K</td>
-      <td class="gt_row gt_center gt_striped">$331K</td>
-      <td class="gt_row gt_center gt_striped">$113K</td>
-      <td class="gt_row gt_center gt_striped">$2.8K</td>
-      <td class="gt_row gt_center gt_striped">$442K</td>
-      <td class="gt_row gt_center gt_striped">$170K</td>
-      <td class="gt_row gt_center gt_striped">$4.2K</td>
-      <td class="gt_row gt_center gt_striped">$663K</td>
-      <td class="gt_row gt_center gt_striped">$226K</td>
-      <td class="gt_row gt_center gt_striped">$5.7K</td>
-      <td class="gt_row gt_center gt_striped">$884K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center">11</td>
-      <td class="gt_row gt_center">$51K</td>
-      <td class="gt_row gt_center">$1.3K</td>
-      <td class="gt_row gt_center">$201K</td>
-      <td class="gt_row gt_center">$60K</td>
-      <td class="gt_row gt_center">$1.5K</td>
-      <td class="gt_row gt_center">$233K</td>
-      <td class="gt_row gt_center">$89K</td>
-      <td class="gt_row gt_center">$2.2K</td>
-      <td class="gt_row gt_center">$349K</td>
-      <td class="gt_row gt_center">$119K</td>
-      <td class="gt_row gt_center">$3.0K</td>
-      <td class="gt_row gt_center">$466K</td>
-      <td class="gt_row gt_center">$179K</td>
-      <td class="gt_row gt_center">$4.5K</td>
-      <td class="gt_row gt_center">$699K</td>
-      <td class="gt_row gt_center">$238K</td>
-      <td class="gt_row gt_center">$6.0K</td>
-      <td class="gt_row gt_center">$932K</td>
-    </tr>
-    <tr>
-      <td class="gt_row gt_center gt_striped">12</td>
-      <td class="gt_row gt_center gt_striped">$54K</td>
-      <td class="gt_row gt_center gt_striped">$1.4K</td>
-      <td class="gt_row gt_center gt_striped">$211K</td>
-      <td class="gt_row gt_center gt_striped">$63K</td>
-      <td class="gt_row gt_center gt_striped">$1.6K</td>
-      <td class="gt_row gt_center gt_striped">$245K</td>
-      <td class="gt_row gt_center gt_striped">$94K</td>
-      <td class="gt_row gt_center gt_striped">$2.3K</td>
-      <td class="gt_row gt_center gt_striped">$367K</td>
-      <td class="gt_row gt_center gt_striped">$125K</td>
-      <td class="gt_row gt_center gt_striped">$3.1K</td>
-      <td class="gt_row gt_center gt_striped">$490K</td>
-      <td class="gt_row gt_center gt_striped">$188K</td>
-      <td class="gt_row gt_center gt_striped">$4.7K</td>
-      <td class="gt_row gt_center gt_striped">$734K</td>
-      <td class="gt_row gt_center gt_striped">$251K</td>
-      <td class="gt_row gt_center gt_striped">$6.3K</td>
-      <td class="gt_row gt_center gt_striped">$979K</td>
-    </tr>
-  </tbody>
-  <tfoot class="gt_sourcenotes">
-    <tr>
-      <td class="gt_sourcenote" colspan="19">Greater Louisville Project</td>
-    </tr>
-    <tr>
-      <td class="gt_sourcenote" colspan="19">Analysis framework from the 2019 Housing Needs Assessment.</td>
-    </tr>
-  </tfoot>
-  
-</table></div>
 </div>
 
 
@@ -4390,7 +3718,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
