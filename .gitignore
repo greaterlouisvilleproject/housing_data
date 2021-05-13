@@ -6,5 +6,6 @@
 census_key.txt
 
 *.Rproj
+usa_00083.dat.gz
 
-*.html
+usa_00083.xml
